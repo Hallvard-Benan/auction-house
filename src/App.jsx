@@ -3,7 +3,7 @@ import { Outlet } from "@tanstack/react-router";
 
 function App() {
   return (
-    <>
+    <div className="w-calc mx-auto">
       <a href="/" className="border">
         home
       </a>
@@ -17,7 +17,7 @@ function App() {
         create
       </a>
       <Outlet />
-    </>
+    </div>
   );
 }
 
