@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchAllListings } from "../lib/api";
+import Listings from "../components/Listings";
 
 function Home() {
-  return <div>Home</div>;
+  return <Listings />;
 }
 
 export default Home;

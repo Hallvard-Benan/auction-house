@@ -4,6 +4,7 @@ import Listing from "./pages/Listing";
 import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
 import Root from "./App";
+
 const rootRoute = new RootRoute({
   component: Root,
 });
@@ -39,5 +40,5 @@ const routeTree = rootRoute.addChildren([
   createListingRoute,
 ]);
 
-export const router = new Router([routeTree]);
+export const router = new Router({ routeTree });
 export default router;
