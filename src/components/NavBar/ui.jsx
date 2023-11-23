@@ -23,7 +23,7 @@ function NavBarUi({ loggedIn, visible, fixed }) {
     >
       <Link to="/">
         <img
-          src="../../src/assets/auctionlogofirst.svg"
+          src="/src/assets/auctionlogofirst.svg"
           alt="logo and home button"
           className="h-16"
         />
