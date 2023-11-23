@@ -2,7 +2,7 @@ export const baseUrl = import.meta.env.VITE_API_URL;
 
 export async function fetchAllListings() {
   try {
-    const res = await fetch(`${baseUrl}/listings`);
+    const res = await fetch(`${baseUrl}/listings?_bids=true&_seller=true`);
     return res.json();
   } catch (error) {
     return error;
