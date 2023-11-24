@@ -11,15 +11,14 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import LoginModal from "./LoginModal";
 
-function RegisterModal({ variant }) {
+function RegisterModal({ openState = false }) {
   return (
-    <Dialog>
+    <Dialog open={openState} data-state="open">
       <DialogTrigger asChild>
         <Button>Register</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent data-state="open" className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Register a new account</DialogTitle>
         </DialogHeader>
@@ -63,7 +62,7 @@ function RegisterModal({ variant }) {
           </Button>
           <div className="flex col-span-2 items-center gap-2">
             Already a user?
-            <LoginModal variant="secondary">Log in</LoginModal>
+            <Button variant="secondary">Log in</Button>
           </div>
         </DialogFooter>
       </DialogContent>

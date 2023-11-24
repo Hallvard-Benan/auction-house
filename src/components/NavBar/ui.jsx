@@ -20,7 +20,7 @@ function NavBarUi({ loggedIn, visible, fixed }) {
     <nav
       className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
         visible ? "" : "-translate-y-16"
-      } ${fixed && visible ? "fixed w-calc" : "static"}`}
+      } ${fixed && visible ? "fixed w-calc z-10" : "static"}`}
     >
       <Link to="/">
         <img src={imageUrl} alt="logo and home button" className="h-16" />
@@ -52,7 +52,10 @@ function NavBarUi({ loggedIn, visible, fixed }) {
         </>
       ) : (
         <div className="flex gap-2 items-center">
-          <RegisterModal variant="primary"></RegisterModal>
+          <RegisterModal
+            id="registerControll"
+            variant="primary"
+          ></RegisterModal>
           <LoginModal></LoginModal>
         </div>
       )}

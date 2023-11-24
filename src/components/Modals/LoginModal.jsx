@@ -51,9 +51,7 @@ function LoginModal() {
           </Button>
           <div className="flex col-span-2 items-center gap-2">
             Not a user?
-            <RegisterModal data-state="open" variant="secondary">
-              Sign up
-            </RegisterModal>
+            <Button>Sign up</Button>
           </div>
         </DialogFooter>
       </DialogContent>
