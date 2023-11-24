@@ -7,15 +7,24 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 
-import LoginModal from "../Modals/LoginModal";
+import { Button } from "../ui/button";
 
 import imageUrl from "../../assets/auctionlogofirst.svg";
 
 import { TfiMenu, TfiPlus } from "react-icons/tfi";
 import { FiLogOut } from "react-icons/fi";
 import { LuUser2 } from "react-icons/lu";
-import RegisterModal from "../Modals/RegisterModal";
+import LoginModal from "../Modals/LoginModal";
+import { useState } from "react";
 function NavBarUi({ loggedIn, visible, fixed }) {
+  const [modalVersion, setModalVersion] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = function (modalVersion) {
+    setModalOpen(true);
+    setModalVersion(modalVersion);
+  };
+
   return (
     <nav
       className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
@@ -52,11 +61,20 @@ function NavBarUi({ loggedIn, visible, fixed }) {
         </>
       ) : (
         <div className="flex gap-2 items-center">
-          <RegisterModal
-            id="registerControll"
-            variant="primary"
-          ></RegisterModal>
-          <LoginModal></LoginModal>
+          <Button onClick={() => openModal("register")}>Register</Button>
+          <Button variant="secondary" onClick={() => openModal("login")}>
+            Login
+          </Button>
+          <LoginModal
+            closeModal={() => setModalOpen((prev) => !prev)}
+            open={modalOpen}
+            type={modalVersion}
+            changeModalType={() =>
+              setModalVersion((prev) =>
+                prev === "login" ? "register" : "login"
+              )
+            }
+          ></LoginModal>
         </div>
       )}
     </nav>
