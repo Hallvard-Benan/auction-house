@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -13,21 +12,37 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../../lib/api";
+import { registerUser } from "../../lib/api";
+import { useNavigate } from "@tanstack/react-router";
+import { useRef } from "react";
 
 function LoginModal({ open, type, changeModalType, closeModal }) {
-  useEffect(() => {
-    const handleEscapeKeyPress = (event) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    };
+  const navigate = useNavigate();
+  const emailRef = useRef;
 
-    document.addEventListener("keydown", handleEscapeKeyPress);
+  const { status, error, mutate } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (res) => {
+      window.localStorage.setItem("access_token", res.accessToken);
+      console.log("success>>>", res.accessToken);
+      navigate({ to: "/" });
+      closeModal();
+    },
+  });
 
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKeyPress);
-    };
-  }, [closeModal]);
+  const handleOnSubmitLogin = function (event) {
+    event.preventDefault();
+
+    mutate({
+      email: event.target.email.value,
+      password: event.target.password.value,
+    });
+  };
+  if (status === "error") return <div>{error.message}</div>;
+  if (status === "pending") return <div>loading...</div>;
 
   return (
     <Dialog open={open} onEscapeKeyPress={() => closeModal()}>
@@ -43,39 +58,41 @@ function LoginModal({ open, type, changeModalType, closeModal }) {
           <DialogHeader>
             <DialogTitle>Log in</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="">
-                Email
-              </Label>
-              <Input
-                id="email"
-                placeHolder="Email@stud.noroff.no"
-                className="col-span-4"
-              />
+          <form onSubmit={handleOnSubmitLogin}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  placeHolder="Email@stud.noroff.no"
+                  className="col-span-4"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="password" className="">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  placeHolder="Password"
+                  className="col-span-4"
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="">
-                Password
-              </Label>
-              <Input
-                id="password"
-                placeHolder="Password"
-                className="col-span-4"
-              />
-            </div>
-          </div>
-          <DialogFooter className="grid gap-6 grid-cols-2">
-            <Button type="submit" className="col-span-2">
-              Log in
-            </Button>
-            <div className="flex col-span-2 items-center gap-2">
-              Not a user?
-              <Button onClick={() => changeModalType("register")}>
-                Sign up
+            <DialogFooter className="grid gap-6 grid-cols-2">
+              <Button type="submit" className="col-span-2">
+                Log in
               </Button>
-            </div>
-          </DialogFooter>
+              <div className="flex col-span-2 items-center gap-2">
+                Not a user?
+                <Button onClick={() => changeModalType("register")}>
+                  Sign up
+                </Button>
+              </div>
+            </DialogFooter>
+          </form>
         </DialogContent>
       ) : (
         <DialogContent data-state="open" className="sm:max-w-[425px]">

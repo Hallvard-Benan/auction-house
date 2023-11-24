@@ -1,34 +1,23 @@
-import { useState, useEffect } from "react";
-import { fetchAllListings } from "../../lib/api";
 import SkeletonListings from "./loading";
+import { fetchAllListings } from "../../lib/api";
 import ListingsUi from "./ui";
+import { useQuery } from "@tanstack/react-query";
 
 function Listings() {
-  const [listings, setListings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const initialListings = await fetchAllListings();
-        setListings(initialListings);
-      } catch (error) {
-        console.error("Error fetching listings:", error);
-        console.log(error.message);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const {
+    status,
+    error,
+    data: listings,
+  } = useQuery({
+    queryKey: ["listings"],
+    queryFn: fetchAllListings,
+  });
 
-    fetchData();
-  }, []);
-
-  if (error) {
-    return <div>{error}</div>;
+  if (status === "error") {
+    return <div>{error.message} </div>;
   }
 
-  if (isLoading) {
+  if (status === "pending") {
     return <SkeletonListings />;
   }
 

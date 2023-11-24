@@ -15,7 +15,7 @@ import { TfiMenu, TfiPlus } from "react-icons/tfi";
 import { FiLogOut } from "react-icons/fi";
 import { LuUser2 } from "react-icons/lu";
 import LoginModal from "../Modals/LoginModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function NavBarUi({ loggedIn, visible, fixed }) {
   const [modalVersion, setModalVersion] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,6 +24,20 @@ function NavBarUi({ loggedIn, visible, fixed }) {
     setModalOpen(true);
     setModalVersion(modalVersion);
   };
+
+  useEffect(() => {
+    const handleEscapeKeyPress = (event) => {
+      if (event.key === "Escape" && modalOpen) {
+        setModalOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKeyPress);
+    };
+  }, [modalOpen]);
 
   return (
     <nav
