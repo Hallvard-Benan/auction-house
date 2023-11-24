@@ -8,7 +8,8 @@ import {
 } from "../ui/dropdown-menu";
 
 import LoginModal from "../Modals/LoginModal";
-import { Button } from "../ui/button";
+
+import imageUrl from "../../assets/auctionlogofirst.svg";
 
 import { TfiMenu, TfiPlus } from "react-icons/tfi";
 import { FiLogOut } from "react-icons/fi";
@@ -22,11 +23,7 @@ function NavBarUi({ loggedIn, visible, fixed }) {
       } ${fixed && visible ? "fixed w-calc" : "static"}`}
     >
       <Link to="/">
-        <img
-          src="./src/assets/auctionlogofirst.svg"
-          alt="logo and home button"
-          className="h-16"
-        />
+        <img src={imageUrl} alt="logo and home button" className="h-16" />
       </Link>
       {loggedIn ? (
         <>
