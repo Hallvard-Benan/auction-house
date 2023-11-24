@@ -18,8 +18,8 @@ import RegisterModal from "../Modals/RegisterModal";
 function NavBarUi({ loggedIn, visible, fixed }) {
   return (
     <nav
-      className={`w-calc flex justify-between border-b-2 transition-all duration-500 ${
-        visible ? "bg-white z-10" : "hidden"
+      className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
+        visible ? "" : "-translate-y-16"
       } ${fixed && visible ? "fixed w-calc" : "static"}`}
     >
       <Link to="/">
