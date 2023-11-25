@@ -7,38 +7,14 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 
-import { Button } from "../ui/button";
-
 import imageUrl from "../../assets/auctionlogofirst.svg";
 
 import { TfiMenu, TfiPlus } from "react-icons/tfi";
 import { FiLogOut } from "react-icons/fi";
 import { LuUser2 } from "react-icons/lu";
 import LoginModal from "../Modals/LoginModal";
-import { useState, useEffect } from "react";
+
 function NavBarUi({ loggedIn, visible, fixed }) {
-  const [modalVersion, setModalVersion] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const openModal = function (modalVersion) {
-    setModalOpen(true);
-    setModalVersion(modalVersion);
-  };
-
-  useEffect(() => {
-    const handleEscapeKeyPress = (event) => {
-      if (event.key === "Escape" && modalOpen) {
-        setModalOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleEscapeKeyPress);
-
-    return () => {
-      document.removeEventListener("keydown", handleEscapeKeyPress);
-    };
-  }, [modalOpen]);
-
   return (
     <nav
       className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
@@ -74,22 +50,7 @@ function NavBarUi({ loggedIn, visible, fixed }) {
           </div>{" "}
         </>
       ) : (
-        <div className="flex gap-2 items-center">
-          <Button onClick={() => openModal("register")}>Register</Button>
-          <Button variant="secondary" onClick={() => openModal("login")}>
-            Login
-          </Button>
-          <LoginModal
-            closeModal={() => setModalOpen((prev) => !prev)}
-            open={modalOpen}
-            type={modalVersion}
-            changeModalType={() =>
-              setModalVersion((prev) =>
-                prev === "login" ? "register" : "login"
-              )
-            }
-          ></LoginModal>
-        </div>
+        <LoginModal />
       )}
     </nav>
   );
