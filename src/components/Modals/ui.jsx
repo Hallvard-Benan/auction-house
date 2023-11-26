@@ -84,41 +84,42 @@ function LoginModalUi({
           <form onSubmit={handleOnSubmitRegister}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="">
+                <Label htmlFor="nameRegister" className="">
                   Name
                 </Label>
                 <Input
-                  id="name"
+                  id="nameRegister"
+                  name="nameRegister"
                   placeHolder="Username"
                   className="col-span-4"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="">
+                <Label htmlFor="emailRegister" className="">
                   Email
                 </Label>
                 <Input
-                  id="email"
+                  id="emailRegister"
                   placeHolder="Email@stud.noroff.no"
                   className="col-span-4"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="password" className="">
+                <Label htmlFor="passwordRegister" className="">
                   Password
                 </Label>
                 <Input
-                  id="password"
+                  id="passwordRegister"
                   placeHolder="Password"
                   className="col-span-4"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="avatar" className="">
+                <Label htmlFor="avatarRegister" className="">
                   Avatar image:
                 </Label>
                 <Input
-                  id="avatar"
+                  id="avatarRegister"
                   placeHolder="image url"
                   className="col-span-4"
                 />

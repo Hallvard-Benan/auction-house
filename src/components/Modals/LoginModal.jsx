@@ -4,6 +4,7 @@ import { registerUser } from "../../lib/api";
 import { useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
+import { useAuth } from "../../Context/AuthContext";
 
 import LoginModalUi from "./ui";
 
@@ -12,6 +13,7 @@ function LoginModal() {
   const queryClient = useQueryClient();
   const [modalVersion, setModalVersion] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const { login } = useAuth();
 
   const changeModalType = function (type) {
     setModalVersion(type);
@@ -43,9 +45,10 @@ function LoginModal() {
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (res) => {
+      login(res);
       window.localStorage.setItem("access_token", res.accessToken);
       console.log("success>>>", res.accessToken);
-      queryClient.invalidate("listings");
+      queryClient.invalidateQueries({ queryKey: ["listings"] });
       navigate({ to: "/" });
       closeModal();
     },
@@ -53,20 +56,24 @@ function LoginModal() {
 
   const registerUserMutation = useMutation({
     mutationFn: registerUser,
+    onError: (err) => {
+      console.log(err);
+    },
     onSuccess: (res) => {
-      console.log("registered successfully", res);
+      console.log("registered successfully", res.email);
+      window.localStorage.setItem("access_token", res.email);
+
       setModalVersion("login");
     },
   });
 
   const handleOnSubmitRegister = function (event) {
     event.preventDefault();
-
     registerUserMutation.mutate({
-      email: event.target.email.value,
-      name: event.target.name.value,
-      password: event.target.password.value,
-      avatar: event.target.avatar.value,
+      name: event.target.nameRegister.value,
+      email: event.target.emailRegister.value,
+      password: event.target.passwordRegister.value,
+      avatar: event.target.avatarRegister.value,
     });
   };
 

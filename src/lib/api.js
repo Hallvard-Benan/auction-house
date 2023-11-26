@@ -16,7 +16,7 @@ export async function fetchOneListing(id) {
   }
 }
 
-export async function registerUser(email, name, password, avatar) {
+export async function registerUser({ email, name, password, avatar }) {
   const res = await axios.post(`${baseUrl}/auth/register`, {
     name,
     email,

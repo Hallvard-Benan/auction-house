@@ -14,7 +14,7 @@ import { FiLogOut } from "react-icons/fi";
 import { LuUser2 } from "react-icons/lu";
 import LoginModal from "../Modals/LoginModal";
 
-function NavBarUi({ loggedIn, visible, fixed }) {
+function NavBarUi({ loggedIn, visible, fixed, handleLogout }) {
   return (
     <nav
       className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
@@ -42,7 +42,10 @@ function NavBarUi({ loggedIn, visible, fixed }) {
                 <DropdownMenuItem>Watchlist</DropdownMenuItem>
                 <DropdownMenuItem>My listings</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-700">
+                <DropdownMenuItem
+                  className="text-red-700"
+                  onClick={handleLogout}
+                >
                   Logout <FiLogOut />
                 </DropdownMenuItem>
               </DropdownMenuContent>
