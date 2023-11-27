@@ -4,7 +4,7 @@ import CreateListingForm from "../components/Forms/createListingForm";
 
 function CreateListing() {
   return (
-    <main className="grid gap-6">
+    <main className="grid gap-6 w-calc">
       <SearchBar />
       <CreateListingForm></CreateListingForm>
     </main>
