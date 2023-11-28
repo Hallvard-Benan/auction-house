@@ -1,110 +1,119 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { Button } from "../ui/button";
-import Tags from "./tags";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { useState } from "react";
+import { Button } from "../ui/button";
+import Tags from "./Tags";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { TfiClose } from "react-icons/tfi";
 
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "A title is required, and must be at least 2 characters.",
-  }),
-  tags: z.array().min(1, {
-    message: "a tag is required",
-  }),
-});
+import Images from "./images";
 
 export default function CreateListingForm() {
   const [tags, setTags] = useState([]);
-
-  // 1. Define your form.
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-    },
-  });
-
-  // 2. Define a submit handler.
-  function onSubmit(data) {
-    console.log(data);
-  }
+  const [images, setImages] = useState([]);
+  const [title, setTitle] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [description, setDescription] = useState("");
+  const [isAddingImage, setIsAddingImage] = useState(false);
+  const [isAddingTag, setIsAddingTag] = useState(false);
 
   const handleTagsChange = (newTags) => {
     setTags(newTags);
   };
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title:</FormLabel>
-              <FormControl>
-                <Input placeholder="Title of the listing" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Describe the listing" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Tags tags={tags} onTagsChange={handleTagsChange}></Tags>
-        <FormField
-          control={form.control}
-          name="tags"
-          value={tags}
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <FormMessage {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+  const handleTagsAdd = () => {
+    setIsAddingTag(false);
+  };
 
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+  const handleImageAdd = () => {
+    setIsAddingImage(false);
+  };
+  const handleImagesChange = (newImages) => {
+    setImages(newImages);
+  };
+
+  const removeTag = function (tagToRemove) {
+    const upToDateTags = tags.filter((tag) => tag !== tagToRemove);
+    handleTagsChange(upToDateTags);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    // Collect data from form components
+    const formData = {
+      title: title,
+      description: description,
+      tags: tags,
+      images: images,
+    };
+
+    // Make a fetch request
+    console.log(JSON.stringify(formData));
+  };
+
+  return (
+    <form onSubmit={onSubmit} className=" grid gap-4 ">
+      <Tags
+        tags={tags}
+        onTagsChange={handleTagsChange}
+        active={isAddingTag}
+        onTagsAdd={handleTagsAdd}
+      />
+      {!isAddingTag && (
+        <Button type="button" onClick={() => setIsAddingTag(true)}>
+          Add a new Tag
+        </Button>
+      )}
+      {tags.length > 0 && (
+        <div id="tagBox" className="flex flex-wrap gap-2">
+          {tags.map((tagName) => (
+            <div
+              key={tagName}
+              className="bg-secondary px-4 py-1 rounded-lg flex items-center gap-1 "
+            >
+              <p className="text-secondary-foreground text-sm">{tagName}</p>
+              <Button
+                onClick={() => removeTag(tagName)}
+                className="rounded-full aspect-square p-0 bg-muted hover:bg-destructive-1/2 hover:text-destructive text-muted-foreground w-8 h-8"
+              >
+                <TfiClose />
+                <Input className="hidden"></Input>
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+      <Input
+        placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <Textarea
+        placeholder="Your description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      {!isAddingImage && (
+        <Button
+          type="button"
+          onClick={() => {
+            setIsAddingImage(true);
+          }}
+        >
+          Add new image
+        </Button>
+      )}
+      <Images
+        onExit
+        images={images}
+        onImagesChange={handleImagesChange}
+        onImageAdd={handleImageAdd}
+        active={isAddingImage}
+      ></Images>
+      <Button type="submit" variant={validated ? "primary" : "secondary"}>
+        Create this listing
+      </Button>
+    </form>
   );
 }
-
-// import { Input } from "../ui/input";
-// import Tags from "./tags";
-// import { Button } from "../ui/button";
-
-// export default function CreateListingForm() {
-//   return (
-//     <form action="">
-//       <Input></Input>
-//       <Tags></Tags>
-//       <Button type="submit"></Button>
-//     </form>
-//   );
-// }
