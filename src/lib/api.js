@@ -8,12 +8,10 @@ export async function fetchAllListings() {
 }
 
 export async function fetchOneListing(id) {
-  try {
-    const res = await axios.get(`${baseUrl}/listings/${id}`);
-    return res.data;
-  } catch (error) {
-    return error;
-  }
+  const res = await axios.get(
+    `${baseUrl}/listings/${id}?_bids=true&_seller=true`
+  );
+  return res.data;
 }
 
 export async function registerUser({ email, name, password, avatar }) {
@@ -32,4 +30,36 @@ export async function loginUser({ email, password }) {
     password,
   });
   return res.data;
+}
+
+export async function createListing({
+  title,
+  description,
+  tags,
+  images,
+  endsAt,
+}) {
+  try {
+    const accessToken = window.localStorage.getItem("access_token");
+    const res = await axios.post(
+      `${baseUrl}/listings`,
+      {
+        title,
+        description,
+        tags,
+        images,
+        endsAt,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("Error creating listing:", error);
+    throw error; // Rethrow the error to let the calling code handle it
+  }
 }

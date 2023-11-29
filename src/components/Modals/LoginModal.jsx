@@ -44,8 +44,12 @@ function LoginModal() {
 
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
+    onError: (res) => {
+      console.log(res);
+    },
     onSuccess: (res) => {
       login(res);
+      console.log(res);
       window.localStorage.setItem("access_token", res.accessToken);
       console.log("success>>>", res.accessToken);
       queryClient.invalidateQueries({ queryKey: ["listings"] });

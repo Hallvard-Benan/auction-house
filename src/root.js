@@ -1,8 +1,8 @@
 import { Router, Route, RootRoute } from "@tanstack/react-router";
-import Home from "./pages/Home";
-import Listing from "./pages/Listing";
-import Profile from "./pages/Profile";
-import CreateListing from "./pages/CreateListing";
+import HomePage from "./pages/HomePage";
+import ListingPage from "./pages/ListingPage";
+import ProfilePage from "./pages/ProfilePage";
+import CreateListingPage from "./pages/CreateListingPage";
 import Root from "./App";
 
 const rootRoute = new RootRoute({
@@ -12,25 +12,25 @@ const rootRoute = new RootRoute({
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: Home,
+  component: HomePage,
 });
 
 const listingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/listing",
-  component: Listing,
+  component: ListingPage,
 });
 
 const profileRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/profile",
-  component: Profile,
+  component: ProfilePage,
 });
 
 const createListingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/create",
-  component: CreateListing,
+  component: CreateListingPage,
 });
 
 const routeTree = rootRoute.addChildren([

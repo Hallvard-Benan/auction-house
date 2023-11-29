@@ -1,7 +1,7 @@
 import Listings from "../components/Listings";
 import SearchBar from "../components/ui/searchBar";
 
-function Home() {
+function HomePage() {
   return (
     <main className="grid gap-6">
       <SearchBar />
@@ -10,4 +10,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomePage;

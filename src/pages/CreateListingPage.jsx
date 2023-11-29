@@ -2,7 +2,7 @@ import React from "react";
 import SearchBar from "../components/ui/searchBar";
 import CreateListingForm from "../components/Forms/createListingForm";
 
-function CreateListing() {
+function CreateListingPage() {
   return (
     <main className="grid gap-6 w-calc">
       <SearchBar />
@@ -11,4 +11,4 @@ function CreateListing() {
   );
 }
 
-export default CreateListing;
+export default CreateListingPage;

@@ -5,18 +5,30 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { TfiClose } from "react-icons/tfi";
+import { createListing } from "/src/lib/api";
 
 import Images from "./images";
+import { useMutation } from "@tanstack/react-query";
 
 export default function CreateListingForm() {
   const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
   const [validated, setValidated] = useState(false);
   const [description, setDescription] = useState("");
   const [isAddingImage, setIsAddingImage] = useState(false);
   const [isAddingTag, setIsAddingTag] = useState(false);
 
+  const createListingMutation = useMutation({
+    mutationFn: createListing,
+    onError: (err) => {
+      console.log(err);
+    },
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
   const handleTagsChange = (newTags) => {
     setTags(newTags);
   };
@@ -42,14 +54,14 @@ export default function CreateListingForm() {
 
     // Collect data from form components
     const formData = {
+      endsAt: date,
       title: title,
       description: description,
       tags: tags,
       images: images,
     };
 
-    // Make a fetch request
-    console.log(JSON.stringify(formData));
+    createListingMutation.mutate(formData);
   };
 
   return (
@@ -111,7 +123,12 @@ export default function CreateListingForm() {
         onImageAdd={handleImageAdd}
         active={isAddingImage}
       ></Images>
-      <Button type="submit" variant={validated ? "primary" : "secondary"}>
+      <Input type="date" onChange={(e) => setDate(e.target.value)}></Input>
+      <Button
+        type="submit"
+        value={date}
+        variant={validated ? "primary" : "secondary"}
+      >
         Create this listing
       </Button>
     </form>
