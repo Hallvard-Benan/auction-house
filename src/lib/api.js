@@ -3,7 +3,9 @@ import axios from "axios";
 export const baseUrl = import.meta.env.VITE_API_URL;
 
 export async function fetchAllListings() {
-  const res = await axios.get(`${baseUrl}/listings?_bids=true&_seller=true`);
+  const res = await axios.get(
+    `${baseUrl}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`
+  );
   return res.data;
 }
 
@@ -36,7 +38,7 @@ export async function createListing({
   title,
   description,
   tags,
-  images,
+  media,
   endsAt,
 }) {
   try {
@@ -47,7 +49,7 @@ export async function createListing({
         title,
         description,
         tags,
-        images,
+        media,
         endsAt,
       },
       {

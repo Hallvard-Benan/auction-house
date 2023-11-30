@@ -58,7 +58,7 @@ export default function CreateListingForm() {
       title: title,
       description: description,
       tags: tags,
-      images: images,
+      media: images,
     };
 
     createListingMutation.mutate(formData);
