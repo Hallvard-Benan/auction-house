@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
-
+const accessToken = window.localStorage.getItem("access_token");
 export async function fetchAllListings() {
   const res = await axios.get(
     `${baseUrl}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`
@@ -10,7 +10,6 @@ export async function fetchAllListings() {
 }
 
 export async function fetchAllListingsByUser(name) {
-  const accessToken = window.localStorage.getItem("access_token");
   const res = await axios.get(
     `${baseUrl}/profiles/${name}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`,
     {
@@ -40,7 +39,6 @@ export async function registerUser({ email, name, password, avatar }) {
 }
 
 export async function getProfile(name) {
-  const accessToken = window.localStorage.getItem("access_token");
   const res = await axios.get(`${baseUrl}/profiles/${name}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -66,7 +64,6 @@ export async function createListing({
   endsAt,
 }) {
   try {
-    const accessToken = window.localStorage.getItem("access_token");
     const res = await axios.post(
       `${baseUrl}/listings`,
       {
@@ -88,4 +85,19 @@ export async function createListing({
     console.error("Error creating listing:", error);
     throw error; // Rethrow the error to let the calling code handle it
   }
+}
+
+export async function updateProfileImage(avatar, name) {
+  const res = await axios.put(
+    `${baseUrl}/profiles/${name}/media`,
+    {
+      avatar,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return res.data;
 }
