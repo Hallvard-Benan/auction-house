@@ -6,7 +6,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { TfiClose } from "react-icons/tfi";
 import { createListing } from "/src/lib/api";
-import Tags from "../Forms/Tags";
+import Tag from "../ui/tag";
 import Images from "./images";
 import { useMutation } from "@tanstack/react-query";
 
