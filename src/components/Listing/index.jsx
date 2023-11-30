@@ -19,7 +19,7 @@ function Listing() {
 
   useEffect(() => {
     // Check if listing and listing.seller are available before accessing their properties
-    if (status === "success" && listing && listing.seller) {
+    if (status === "success" && listing && listing.seller && authUser) {
       console.log(authUser);
       setIsMyPost(listing.seller.email === authUser.authEmail);
     }
@@ -28,23 +28,22 @@ function Listing() {
   if (status === "pending") return <div>Loading...</div>;
 
   if (status === "error") return <div>Error:</div>;
-
-  // Render the listing details
-  return (
-    <ListingUi
-      myPost={isMyPost}
-      title={listing.title}
-      description={listing.description}
-      media={listing.media}
-      tags={listing.tags}
-      created={listing.created}
-      updated={listing.updated}
-      endsAt={listing.endsAt}
-      bids={listing.bids}
-      seller={listing.seller}
-      _count={listing._count}
-    />
-  );
+  if (status === "success")
+    return (
+      <ListingUi
+        myPost={isMyPost}
+        title={listing.title}
+        description={listing.description}
+        media={listing.media}
+        tags={listing.tags}
+        created={listing.created}
+        updated={listing.updated}
+        endsAt={listing.endsAt}
+        bids={listing.bids}
+        seller={listing.seller}
+        _count={listing._count}
+      />
+    );
 }
 
 export default Listing;
