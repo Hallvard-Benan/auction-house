@@ -9,6 +9,19 @@ export async function fetchAllListings() {
   return res.data;
 }
 
+export async function fetchAllListingsByUser(name) {
+  const accessToken = window.localStorage.getItem("access_token");
+  const res = await axios.get(
+    `${baseUrl}/profiles/${name}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return res.data;
+}
+
 export async function fetchOneListing(id) {
   const res = await axios.get(
     `${baseUrl}/listings/${id}?_bids=true&_seller=true`

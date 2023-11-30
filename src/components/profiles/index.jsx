@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 
 import ProfileUi from "./ui";
 
+import ListingsByUser from "../Listings/byUser";
+
 function Profile() {
   const [isMyProfile, setIsMyProfile] = useState(false);
 
@@ -30,14 +32,17 @@ function Profile() {
   if (status === "error") return <div>Error:</div>;
   if (status === "success")
     return (
-      <ProfileUi
-        myProfile={isMyProfile}
-        name={profile.name}
-        avatar={profile.avatar}
-        credits={profile.credits}
-        wins={profile.wins}
-        _count={profile._count}
-      ></ProfileUi>
+      <>
+        <ProfileUi
+          myProfile={isMyProfile}
+          name={profile.name}
+          avatar={profile.avatar}
+          credits={profile.credits}
+          wins={profile.wins}
+          _count={profile._count}
+        ></ProfileUi>
+        <ListingsByUser user={profileName} />
+      </>
     );
 }
 

@@ -27,8 +27,8 @@ function NavBar() {
       if (window.scrollY > 60) {
         const currentScrollPos = window.scrollY;
         setVisible(
-          (scrollPosition > currentScrollPos && window.scrollY !== 61) ||
-            (currentScrollPos < 10 && window.scrollY !== 61)
+          (scrollPosition > currentScrollPos && window.scrollY !== 20) ||
+            (currentScrollPos < 10 && window.scrollY !== 20)
         );
         setScrollPosition(currentScrollPos);
         setFixed(true);
