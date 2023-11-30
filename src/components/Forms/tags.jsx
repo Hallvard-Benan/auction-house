@@ -11,7 +11,7 @@ import { FaHouseChimney, FaShirt } from "react-icons/fa6";
 import { useState } from "react";
 import Category from "../ui/category";
 
-function Tags({ tags = [], onTagsChange, active, onTagsAdd }) {
+function Tags({ tags = [], onTagsChange, active, onTagsAdd, onTagsRemove }) {
   const [tag, setTag] = useState("");
   const [error, setError] = useState("");
 
@@ -49,7 +49,7 @@ function Tags({ tags = [], onTagsChange, active, onTagsAdd }) {
               handleToggleCategory={() => {
                 !tags.includes(item.name)
                   ? addTag(item.name)
-                  : removeTag(item.name);
+                  : onTagsRemove(item.name);
               }}
             />
           ))}

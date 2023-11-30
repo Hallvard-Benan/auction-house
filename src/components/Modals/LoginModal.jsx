@@ -49,8 +49,6 @@ function LoginModal() {
     },
     onSuccess: (res) => {
       login(res);
-      console.log(res);
-      window.localStorage.setItem("access_token", res.accessToken);
       console.log("success>>>", res.accessToken);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
       navigate({ to: "/" });
@@ -65,7 +63,7 @@ function LoginModal() {
     },
     onSuccess: (res) => {
       console.log("registered successfully", res.email);
-      window.localStorage.setItem("access_token", res.email);
+      window.localStorage.setItem("email", res.email);
 
       setModalVersion("login");
     },

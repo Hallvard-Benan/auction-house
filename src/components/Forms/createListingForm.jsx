@@ -6,7 +6,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { TfiClose } from "react-icons/tfi";
 import { createListing } from "/src/lib/api";
-
+import Tag from "../ui/tag";
 import Images from "./images";
 import { useMutation } from "@tanstack/react-query";
 
@@ -71,6 +71,7 @@ export default function CreateListingForm() {
         onTagsChange={handleTagsChange}
         active={isAddingTag}
         onTagsAdd={handleTagsAdd}
+        onTagsRemove={removeTag}
       />
       {!isAddingTag && (
         <Button type="button" onClick={() => setIsAddingTag(true)}>
@@ -80,19 +81,12 @@ export default function CreateListingForm() {
       {tags.length > 0 && (
         <div id="tagBox" className="flex flex-wrap gap-2">
           {tags.map((tagName) => (
-            <div
+            <Tag
+              text={tagName}
               key={tagName}
-              className="bg-secondary px-4 py-1 rounded-lg flex items-center gap-1 "
-            >
-              <p className="text-secondary-foreground text-sm">{tagName}</p>
-              <Button
-                onClick={() => removeTag(tagName)}
-                className="rounded-full aspect-square p-0 bg-muted hover:bg-destructive-1/2 hover:text-destructive text-muted-foreground w-8 h-8"
-              >
-                <TfiClose />
-                <Input className="hidden"></Input>
-              </Button>
-            </div>
+              editable={true}
+              handleOnRemove={() => removeTag(tagName)}
+            />
           ))}
         </div>
       )}
