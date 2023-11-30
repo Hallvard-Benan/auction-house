@@ -26,6 +26,17 @@ export async function registerUser({ email, name, password, avatar }) {
   return res.data;
 }
 
+export async function getProfile(name) {
+  const accessToken = window.localStorage.getItem("access_token");
+  const res = await axios.get(`${baseUrl}/profiles/${name}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  console.log(res.data);
+  return res.data;
+}
+
 export async function loginUser({ email, password }) {
   const res = await axios.post(`${baseUrl}/auth/login`, {
     email,

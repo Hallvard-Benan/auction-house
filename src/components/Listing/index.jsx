@@ -15,10 +15,9 @@ function Listing() {
     queryFn: () => fetchOneListing(listingId),
   });
 
-  const { authUser } = useAuth();
+  const { authUser, isLoggedIn } = useAuth();
 
   useEffect(() => {
-    // Check if listing and listing.seller are available before accessing their properties
     if (status === "success" && listing && listing.seller && authUser) {
       console.log(authUser);
       setIsMyPost(listing.seller.email === authUser.authEmail);
@@ -31,6 +30,7 @@ function Listing() {
   if (status === "success")
     return (
       <ListingUi
+        loggedIn={isLoggedIn}
         myPost={isMyPost}
         title={listing.title}
         description={listing.description}

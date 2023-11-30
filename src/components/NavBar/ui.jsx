@@ -14,7 +14,7 @@ import { FiLogOut } from "react-icons/fi";
 import { LuUser2 } from "react-icons/lu";
 import LoginModal from "../Modals/LoginModal";
 
-function NavBarUi({ loggedIn, visible, fixed, handleLogout }) {
+function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
   return (
     <nav
       className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
@@ -36,9 +36,11 @@ function NavBarUi({ loggedIn, visible, fixed, handleLogout }) {
                 <TfiMenu />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <p>My Profile</p> <LuUser2></LuUser2>
-                </DropdownMenuItem>
+                <Link to={profileLink}>
+                  <DropdownMenuItem className=" hover:cursor-pointer">
+                    <p>My Profile</p> <LuUser2></LuUser2>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem>Watchlist</DropdownMenuItem>
                 <DropdownMenuItem>My listings</DropdownMenuItem>
                 <DropdownMenuSeparator />

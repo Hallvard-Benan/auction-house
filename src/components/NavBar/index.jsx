@@ -4,13 +4,24 @@ import NavBarUi from "./ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
+// const profileLink = `/profile?name=${authUser.name}`;
+
 function NavBar() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, authUser } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
   const [fixed, setFixed] = useState(false);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (authUser) {
+      const nameOfUser = authUser.authUserName;
+      setUserName(nameOfUser);
+    }
+  }, [authUser]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 60) {
@@ -38,8 +49,11 @@ function NavBar() {
     queryClient.invalidateQueries({ queryKey: ["listings"] });
   };
 
+  const profileLink = `/profile?name=${userName}`;
+
   return (
     <NavBarUi
+      profileLink={profileLink}
       loggedIn={isLoggedIn}
       visible={visible}
       fixed={fixed}
