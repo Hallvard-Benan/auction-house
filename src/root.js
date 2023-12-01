@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import ListingPage from "./pages/ListingPage";
 import ProfilePage from "./pages/ProfilePage";
 import CreateListingPage from "./pages/CreateListingPage";
+import MyListingsPage from "./pages/MyListingsPage";
 import Root from "./App";
 
 const rootRoute = new RootRoute({
@@ -27,6 +28,12 @@ const profileRoute = new Route({
   component: ProfilePage,
 });
 
+const myListingsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/my-listings",
+  component: MyListingsPage,
+});
+
 const createListingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/create",
@@ -37,6 +44,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   listingRoute,
   profileRoute,
+  myListingsRoute,
   createListingRoute,
 ]);
 

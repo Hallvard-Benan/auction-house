@@ -101,3 +101,20 @@ export async function updateProfileImage(avatar, name) {
   );
   return res.data;
 }
+
+export async function makeBid(amount) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const id = searchParams.get("id");
+  const res = await axios.post(
+    `${baseUrl}/listings/${id}/bids`,
+    {
+      amount,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return res.data;
+}

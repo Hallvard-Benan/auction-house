@@ -15,7 +15,9 @@ function ListingUi({
   seller = {},
   _count = {},
   myPost = false,
+  error = null,
   loggedIn = false,
+  onSubmitBid = () => {},
 }) {
   const sortedBids = bids.sort((a, b) => b.amount - a.amount);
 
@@ -58,10 +60,12 @@ function ListingUi({
             </div>
             {!myPost && (
               <div>
-                <div className="flex">
-                  <Input type="number" /> <Button>place bid</Button>
-                </div>
+                <form className="flex" onSubmit={onSubmitBid}>
+                  <Input type="number" name="bid" />{" "}
+                  <Button type="submit">place bid</Button>
+                </form>
                 <p>available funds: 1234$</p>
+                {error && <p>{error}</p>}
               </div>
             )}
           </div>
