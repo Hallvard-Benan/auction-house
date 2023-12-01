@@ -1,7 +1,9 @@
-import React from "react";
+import { useAuth } from "../Context/AuthContext";
+import ListingsByUser from "../components/Listings/byUser";
 
 function MyListingsPage() {
-  return <div>MyListingsPage</div>;
+  const { authUser } = useAuth();
+  return <ListingsByUser user={authUser.authUserName} />;
 }
 
 export default MyListingsPage;

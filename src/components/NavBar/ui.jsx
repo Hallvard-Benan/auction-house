@@ -42,7 +42,11 @@ function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuItem>Watchlist</DropdownMenuItem>
-                <DropdownMenuItem>My listings</DropdownMenuItem>
+                <Link to="/my-listings">
+                  <DropdownMenuItem className="hover:cursor-pointer">
+                    My listings
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-red-700"
