@@ -118,3 +118,12 @@ export async function makeBid(amount) {
   );
   return res.data;
 }
+
+export async function getBidsByProfile(name) {
+  const res = await axios.post(`${baseUrl}/profiles/${name}/bids`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res.data;
+}
