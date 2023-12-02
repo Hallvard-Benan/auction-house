@@ -13,7 +13,8 @@ function MyBidsPage() {
     }
   }, [authUser]);
 
-  return <Bids user={name} />;
+  if (name && typeof name === "string") return <Bids user={name} />;
+  else return <div>loading...</div>;
 }
 
 export default MyBidsPage;

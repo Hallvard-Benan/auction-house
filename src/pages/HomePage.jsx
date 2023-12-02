@@ -12,6 +12,7 @@ function HomePage() {
     queryKey: ["listings"],
     queryFn: fetchAllListings,
   });
+
   return (
     <main className="grid gap-6">
       <SearchBar />

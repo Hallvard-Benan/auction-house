@@ -12,7 +12,7 @@ function ListingsUi({ listings = [] }) {
   return (
     <section className="w-calc mx-auto">
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center align-center">
-        {listings.map(({ id, title, description, media, _count }) => (
+        {listings.map(({ id, title, description, media }) => (
           <Card key={id} className="overflow-hidden grid justify-between">
             <CardHeader>
               <CardTitle>{title}</CardTitle>
@@ -22,7 +22,6 @@ function ListingsUi({ listings = [] }) {
               <p>{description}</p>
             </CardContent>
             <CardFooter className="flex w-full justify-between">
-              <div>Bids: {_count.bids}</div>
               <Button>
                 <a href={`/listing?id=${id}`}>Link to auction</a>
               </Button>

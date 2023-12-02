@@ -1,6 +1,6 @@
 import SkeletonListings from "./loading";
 import { fetchAllListingsByUser } from "/src/lib/api";
-import ListingsUi from "./ui";
+import Listings from ".";
 import { useQuery } from "@tanstack/react-query";
 
 function ListingsByUser({ user }) {
@@ -21,7 +21,7 @@ function ListingsByUser({ user }) {
     return <SkeletonListings />;
   }
 
-  return <ListingsUi listings={listings} />;
+  return <Listings listings={listings} error={error} status={status} />;
 }
 
 export default ListingsByUser;

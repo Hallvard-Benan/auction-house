@@ -17,7 +17,7 @@ import LoginModal from "../Modals/LoginModal";
 function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
   return (
     <nav
-      className={`w-calc bg-white flex justify-between border-b-2 transition-all duration-500 ${
+      className={`w-calc bg-white flex justify-between border-b-2 transition-translate-y duration-500 ${
         visible ? "" : "-translate-y-16"
       } ${fixed && visible ? "fixed w-calc z-10" : "static"}`}
     >
@@ -41,7 +41,12 @@ function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
                     <p>My Profile</p> <LuUser2></LuUser2>
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem>Watchlist</DropdownMenuItem>
+                <Link to="/my-bids">
+                  <DropdownMenuItem className="hover:cursor-pointer">
+                    My bids
+                  </DropdownMenuItem>
+                </Link>
+
                 <Link to="/my-listings">
                   <DropdownMenuItem className="hover:cursor-pointer">
                     My listings
@@ -49,7 +54,7 @@ function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
                 </Link>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="text-red-700"
+                  className="text-red-700 hover:cursor-pointer"
                   onClick={handleLogout}
                 >
                   Logout <FiLogOut />

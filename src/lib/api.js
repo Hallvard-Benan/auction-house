@@ -120,10 +120,14 @@ export async function makeBid(amount) {
 }
 
 export async function getBidsByProfile(name) {
-  const res = await axios.post(`${baseUrl}/profiles/${name}/bids`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const res = await axios.get(
+    `${baseUrl}/profiles/${name}/bids?_listings=true&_bids=true&_seller=true`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  console.log(res.data);
   return res.data;
 }
