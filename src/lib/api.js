@@ -2,9 +2,20 @@ import axios from "axios";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
 const accessToken = window.localStorage.getItem("access_token");
-export async function fetchAllListings() {
+
+export async function fetchAllListings(
+  pageNumber,
+  limit,
+  sortBy,
+  sortOrder,
+  tag
+) {
+  const offset = (pageNumber - 1) * limit;
+  const tagParam = `&_tag=${tag}`;
   const res = await axios.get(
-    `${baseUrl}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`
+    `${baseUrl}/listings?_bids=true&_seller=true&sort=${sortBy}&sortOrder=${sortOrder}&limit=${limit}&offset=${offset}&_active=true${
+      tag && tagParam
+    }`
   );
   return res.data;
 }
@@ -128,6 +139,5 @@ export async function getBidsByProfile(name) {
       },
     }
   );
-  console.log(res.data);
   return res.data;
 }
