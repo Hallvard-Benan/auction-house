@@ -57,8 +57,10 @@ function ListingsPage() {
   return (
     <>
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
-      {searchQuery && <h2>Results for: {searchQuery}</h2>}
-      <FilterForm></FilterForm>
+      <div className="flex justify-between">
+        {searchQuery && <h2>Results for: {searchQuery}</h2>}
+        <FilterForm></FilterForm>
+      </div>
       <Listings listings={listingsToDisplay} status={status} error={error} />
     </>
   );
