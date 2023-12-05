@@ -11,12 +11,22 @@ export async function fetchAllListings(
   tag
 ) {
   const offset = (pageNumber - 1) * limit;
-  const tagParam = `&_tag=${tag}`;
-  const res = await axios.get(
-    `${baseUrl}/listings?_bids=true&_seller=true&sort=${sortBy}&sortOrder=${sortOrder}&limit=${limit}&offset=${offset}&_active=true${
-      tag && tagParam
-    }`
-  );
+
+  const params = new URLSearchParams();
+  params.append("_bids", "true");
+  params.append("_seller", "true");
+  params.append("sort", sortBy);
+  params.append("sortOrder", sortOrder);
+  params.append("limit", limit.toString());
+  params.append("offset", offset.toString());
+  params.append("_active", "true");
+
+  if (tag) {
+    params.append("_tag", tag);
+  }
+
+  const res = await axios.get(`${baseUrl}/listings?${params.toString()}`);
+  console.log(res);
   return res.data;
 }
 

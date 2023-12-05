@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import Listings from "../components/Listings";
 import SearchBar from "../components/ui/searchBar";
+import { search } from "../lib/search";
 import { fetchAllListings } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "../components/ui/button";
+import { useNavigate } from "@tanstack/react-router";
 
 function HomePage() {
   const [listingsToDisplay, setListingsToDisplay] = useState();
-  const [pageNumber, setPageNumber] = useState(47);
+  const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(100);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLastPage, setIsLastPage] = useState(false);
   const [tag, setTag] = useState("");
-  const queryClient = useQueryClient;
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     status,
@@ -25,33 +29,60 @@ function HomePage() {
     queryFn: () => fetchAllListings(pageNumber, limit, sortBy, sortOrder, tag),
     keepPreviousData: true,
   });
+  useEffect(() => {
+    const windowParams = new URLSearchParams(window.location.search);
+    const urlSearchQuery = windowParams.get("search");
+    console.log("url search query>>>", urlSearchQuery);
 
-  const handleOnSubmitSearch = (e) => {
+    if (urlSearchQuery) {
+      setSearchQuery(urlSearchQuery);
+      const filterListings = async () => {
+        const params = new URLSearchParams({
+          limit,
+          sortBy,
+          sortOrder,
+        });
+
+        // Check if listings is defined before using it
+        if (listings) {
+          const searchWord = urlSearchQuery.trim().toLowerCase();
+          const filteredListings = await search(params, searchWord);
+          setListingsToDisplay(filteredListings);
+          setIsLastPage(filteredListings.length < limit);
+        }
+      };
+
+      filterListings();
+    } else if (!urlSearchQuery) {
+      // Check if listings is defined before using it
+      if (listings) {
+        setListingsToDisplay(listings);
+      }
+    }
+  }, [searchQuery, limit, sortBy, sortOrder, listings]); // Add searchQuery to the dependencies
+
+  const handleOnSubmitSearch = async (e) => {
     e.preventDefault();
     const searchValue = e.target.search.value;
     const searchWord = searchValue.trim().toLowerCase();
 
-    const filteredListings = listings.filter(
-      ({ title, description, seller }) =>
-        title.toLowerCase().includes(searchWord) ||
-        description?.toLowerCase().includes(searchWord) ||
-        seller.name.toLowerCase().includes(searchWord)
-    );
-    setListingsToDisplay(filteredListings);
-    console.log(filteredListings);
+    if (searchWord.length >= 1) {
+      setSearchQuery(searchWord);
+      navigate({ to: `/listings?search=${searchWord}` });
+    }
   };
 
   useEffect(() => {
     if (status === "success") {
       setListingsToDisplay(listings);
-
       setIsLastPage(listings.length < limit);
     }
-  }, [status, listings]);
+  }, [status, listings, limit]);
 
   return (
     <main className="grid gap-6">
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
+      {searchQuery && <h2>Results for: {searchQuery}</h2>}
       <Listings status={status} error={error} listings={listingsToDisplay} />
       <div className="flex gap-2">
         {pageNumber > 1 && (

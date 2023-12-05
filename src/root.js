@@ -6,6 +6,7 @@ import CreateListingPage from "./pages/CreateListingPage";
 import MyListingsPage from "./pages/MyListingsPage";
 import Root from "./App";
 import MyBidsPage from "./pages/MyBidsPage";
+import ListingsPage from "./pages/ListingsPage";
 
 const rootRoute = new RootRoute({
   component: Root,
@@ -15,6 +16,12 @@ const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   component: HomePage,
+});
+
+const listingsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/listings",
+  component: ListingsPage,
 });
 
 const listingRoute = new Route({
@@ -49,6 +56,7 @@ const createListingRoute = new Route({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  listingsRoute,
   listingRoute,
   profileRoute,
   myListingsRoute,

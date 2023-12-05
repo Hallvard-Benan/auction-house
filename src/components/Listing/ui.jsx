@@ -102,6 +102,7 @@ function ListingUi({
           <p>No bids yet</p>
         )}
       </section>
+      {JSON.stringify(bids)}
     </div>
   );
 }
