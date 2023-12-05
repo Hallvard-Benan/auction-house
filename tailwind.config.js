@@ -17,7 +17,7 @@ module.exports = {
     },
     extend: {
       width: {
-        calc: "calc(min(100vw - 10px, 1050px));",
+        calc: "calc(min(100vw - 20px, 1050px));",
       },
       colors: {
         border: "hsl(var(--border))",
