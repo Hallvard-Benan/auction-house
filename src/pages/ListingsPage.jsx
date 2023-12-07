@@ -5,18 +5,30 @@ import FilterForm from "../components/FilterForm";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import SearchBar from "../components/ui/searchBar";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "../components/ui/button";
 
 function ListingsPage() {
-  const [listingsToDisplay, setListingsToDisplay] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
   const [limit, setLimit] = useState(100);
   const [searchQuery, setSearchQuery] = useState("");
   const [tag, setTag] = useState("");
+  const [listingsToDisplay, setListingsToDisplay] = useState([]);
   const [active, setActive] = useState(true);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const fetchMutation = useMutation({
+    mutationFn: search,
+    onError: (e) => {
+      console.log(e);
+    },
+    onSuccess: (data) => {
+      setListingsToDisplay(data), setSearchQuery("");
+    },
+  });
 
   const {
     status,
@@ -50,6 +62,11 @@ function ListingsPage() {
     },
   });
 
+  const handleOnRemoveSearch = async () => {
+    fetchMutation.mutate(sortBy, sortOrder, null, active, "");
+    navigate({ to: "/listings" });
+  };
+
   const handleOnSubmitFilters = (e) => {
     e.preventDefault();
     const sortByValue = e.target.sortBy.value;
@@ -70,7 +87,6 @@ function ListingsPage() {
     navigate({
       to: `/listings?search=${searchQuery}&sortBy=${sortByValue}&sortOrder=${sortOrderValue}&active=${activePostsValue}${tagParam}`,
     });
-    console.log("value of active posts:::", activePostsValue);
   };
 
   const handleOnSubmitSearch = (e) => {
@@ -86,11 +102,26 @@ function ListingsPage() {
     setSearchQuery(searchWord);
   };
 
+  useEffect(() => {
+    status === "success" && setListingsToDisplay(listings);
+  }, [status, listings]);
+
   return (
     <>
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
       <div className="flex justify-between">
-        {searchQuery && <h2>Results for: {searchQuery}</h2>}
+        <div>
+          <h2>Results for: {searchQuery ? searchQuery : "all posts"}</h2>{" "}
+          <Button onClick={handleOnRemoveSearch}>x</Button>
+          <Button
+            onClick={() => {
+              console.log(searchQuery);
+            }}
+          >
+            test
+          </Button>
+        </div>
+
         <FilterForm
           onSubmitFilters={handleOnSubmitFilters}
           defaultActive={active}
@@ -99,7 +130,7 @@ function ListingsPage() {
           defaultTag={tag}
         ></FilterForm>
       </div>
-      <Listings listings={listings} status={status} error={error} />
+      <Listings listings={listingsToDisplay} status={status} error={error} />
     </>
   );
 }

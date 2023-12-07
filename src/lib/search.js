@@ -22,7 +22,8 @@ export async function search(sortBy, sortOrder, tag, active, query) {
       }
 
       // Filter listings based on the query
-      const filteredListings = filterSearch(response, query);
+      const filteredListings =
+        query.length > 0 ? filterSearch(response, query) : response;
 
       // Concatenate the filtered listings to the result
       allFilteredListings = [...allFilteredListings, ...filteredListings];

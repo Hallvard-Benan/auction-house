@@ -32,7 +32,7 @@ function ListingsUi({ listings = [] }) {
                 <CardContent className="px-0 col-span-1 overflow-hidden h-[20rem]">
                   <img
                     src={
-                      media[0]
+                      media && media[0]
                         ? media[0]
                         : "https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"
                     }
