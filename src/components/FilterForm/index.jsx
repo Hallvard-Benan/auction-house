@@ -14,12 +14,31 @@ import { FaFilter } from "react-icons/fa";
 
 import { Checkbox } from "../ui/checkbox";
 
-function FilterForm() {
+function FilterForm({
+  onSubmitFilters,
+  defaultSort,
+  defaultOrder,
+  defaultActive,
+  defaultTag,
+}) {
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const [sortBy, setSortBy] = useState("");
-  const [isActivePostsChecked, setIsActivePostsChecked] = useState(true);
+  const [sortBy, setSortBy] = useState(defaultSort);
+  const [isActivePostsChecked, setIsActivePostsChecked] =
+    useState(defaultActive);
+  const [sortValue, setSortValue] = useState(defaultSort);
+  const [orderValue, setOrderValue] = useState(defaultOrder);
+  const [tag, setTag] = useState(defaultTag);
+
+  const handleOnChangeTag = (e) => {
+    setTag(e.target.value);
+  };
+
   const togglePopoverOpen = () => {
     setPopoverOpen((prev) => !prev);
+  };
+  const handleCheckboxChange = (e) => {
+    console.log(e);
+    setIsActivePostsChecked(e);
   };
 
   return (
@@ -34,17 +53,13 @@ function FilterForm() {
         </p>
       </PopoverTrigger>
       <PopoverContent>
-        <form
-          action=""
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-          className="grid gap-4"
-        >
+        <form action="" onSubmit={onSubmitFilters} className="grid gap-4">
           <Select
+            defaultValue={defaultSort}
             onValueChange={(value) => {
               setSortBy(value);
             }}
+            name="sortBy"
           >
             <SelectTrigger className="">
               <SelectValue placeholder="Sort by:" />
@@ -55,7 +70,7 @@ function FilterForm() {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select name="sortOrder" defaultValue={defaultOrder}>
             <SelectTrigger className="">
               <SelectValue placeholder="Sort order" />
             </SelectTrigger>
@@ -80,13 +95,12 @@ function FilterForm() {
           </Select>
           <div className="flex gap-1 h-6 items-center">
             <Checkbox
-              onClick={() => {
-                setIsActivePostsChecked((prev) => !prev);
-              }}
-              id="activePostsOnly"
-              className=""
+              defaultChecked={defaultActive}
               checked={isActivePostsChecked}
               value={isActivePostsChecked}
+              onCheckedChange={handleCheckboxChange}
+              id="activePostsOnly"
+              name="activePostsOnly"
             />
             <Label
               htmlFor="activePostsOnly"
@@ -98,7 +112,13 @@ function FilterForm() {
 
           <div>
             <Label htmlFor="tag">Chose a tag:</Label>
-            <Input id="tag" placeholder="'phone', 'fashion' etc. "></Input>
+            <Input
+              onChange={handleOnChangeTag}
+              value={tag}
+              id="tag"
+              name="tag"
+              placeholder="'phone', 'fashion' etc. "
+            ></Input>
           </div>
           <div className="flex justify-between">
             <Button

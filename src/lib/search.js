@@ -1,34 +1,28 @@
 import { fetchAllListings } from "./api";
 
-export async function search(params, query) {
+export async function search(sortBy, sortOrder, tag, active, query) {
   let allFilteredListings = [];
   let pageNumber = 1;
+  const searchLimit = 100;
+  const searchTag = tag;
 
   try {
     while (true) {
-      console.log(pageNumber);
-      console.log(
-        params.get("limit"),
-        params.get("sortBy"),
-        params.get("sortOrder"),
-        params.get("tag")
-      );
       const response = await fetchAllListings(
         pageNumber,
-        params.get("limit"),
-        params.get("sortBy"),
-        params.get("sortOrder"),
-        params.get("tag")
+        searchLimit,
+        sortBy,
+        sortOrder,
+        searchTag,
+        active.toString()
       );
 
-      console.log(response);
       if (response.length === 0) {
         break;
       }
 
       // Filter listings based on the query
       const filteredListings = filterSearch(response, query);
-      console.log("filteredLIistings>>>", filteredListings);
 
       // Concatenate the filtered listings to the result
       allFilteredListings = [...allFilteredListings, ...filteredListings];

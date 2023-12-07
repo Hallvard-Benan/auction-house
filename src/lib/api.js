@@ -8,23 +8,23 @@ export async function fetchAllListings(
   limit,
   sortBy,
   sortOrder,
-  tag
+  tag,
+  active
 ) {
   const offset = (pageNumber - 1) * limit;
 
   const params = new URLSearchParams();
   params.append("_bids", "true");
   params.append("_seller", "true");
-  params.append("sort", sortBy);
-  params.append("sortOrder", sortOrder);
+  sortBy && params.append("sort", sortBy);
+  sortOrder && params.append("sortOrder", sortOrder);
   params.append("limit", limit.toString());
   params.append("offset", offset.toString());
-  params.append("_active", "true");
+  active && params.append("_active", active);
 
-  if (tag) {
+  if (tag?.length > 0) {
     params.append("_tag", tag);
   }
-
   const res = await axios.get(`${baseUrl}/listings?${params.toString()}`);
   console.log(res);
   return res.data;

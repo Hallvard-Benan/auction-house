@@ -5,63 +5,101 @@ import FilterForm from "../components/FilterForm";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import SearchBar from "../components/ui/searchBar";
-function ListingsPage() {
-  const [status, setStatus] = useState("pending");
+import { useQuery } from "@tanstack/react-query";
 
+function ListingsPage() {
   const [listingsToDisplay, setListingsToDisplay] = useState();
-  const [error, setError] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
   const [limit, setLimit] = useState(100);
   const [searchQuery, setSearchQuery] = useState("");
   const [tag, setTag] = useState("");
+  const [active, setActive] = useState(true);
   const navigate = useNavigate();
-  const params = new URLSearchParams({
-    limit,
-    sortBy,
-    sortOrder,
+
+  const {
+    status,
+    error,
+    data: listings,
+  } = useQuery({
+    queryKey: ["all listings", tag, active, sortBy, sortOrder, searchQuery],
+    queryFn: () => {
+      const windowParams = new URLSearchParams(window.location.search);
+
+      if (windowParams.get("search")) {
+        setSearchQuery(windowParams.get("search"));
+      }
+
+      if (windowParams.get("sortBy")) {
+        setSortBy(windowParams.get("sortBy"));
+      }
+
+      if (windowParams.get("sortOrder")) {
+        setSortOrder(windowParams.get("sortOrder"));
+      }
+
+      if (windowParams.get("tag")) {
+        setTag(windowParams.get("tag"));
+      }
+
+      if (windowParams.get("active")) {
+        setActive(windowParams.get("active"));
+      }
+      return search(sortBy, sortOrder, tag, active, searchQuery);
+    },
   });
+
+  const handleOnSubmitFilters = (e) => {
+    e.preventDefault();
+    const sortByValue = e.target.sortBy.value;
+    const sortOrderValue = e.target.sortOrder.value;
+    const tagValue = e.target.tag.value;
+    const activePostsValue = e.target.activePostsOnly[1].checked;
+    console.log(activePostsValue);
+    let tagParam = "";
+
+    if (tagValue.length > 0) {
+      tagParam = `&_tag?${tagValue}`;
+    }
+
+    setSortBy(sortByValue);
+    setSortOrder(sortOrderValue);
+    setTag(tagValue);
+    setActive(activePostsValue);
+    navigate({
+      to: `/listings?search=${searchQuery}&sortBy=${sortByValue}&sortOrder=${sortOrderValue}&active=${activePostsValue}${tagParam}`,
+    });
+    console.log("value of active posts:::", activePostsValue);
+  };
 
   const handleOnSubmitSearch = (e) => {
     e.preventDefault();
     const searchValue = e.target.search.value;
     const searchWord = searchValue.trim().toLowerCase();
 
-    if (searchWord.length >= 1) {
-      navigate({ to: `/listings?search=${searchWord}` });
+    if (searchWord.length > 0) {
+      navigate({
+        to: `/listings?search=${searchWord}&sortBy=${sortBy}&sortOrder=${sortOrder}&active=${active}&tag=${tag}`,
+      });
     }
     setSearchQuery(searchWord);
   };
 
-  useEffect(() => {
-    setStatus("pending");
-    const windowParams = new URLSearchParams(window.location.search);
-    const urlSearchQuery = windowParams.get("search");
-    console.log("url search query>>>", urlSearchQuery);
-
-    if (urlSearchQuery) {
-      setSearchQuery(urlSearchQuery);
-      const filterListings = async () => {
-        const searchWord = urlSearchQuery.trim().toLowerCase();
-        const filteredListings = await search(params, searchWord);
-        setListingsToDisplay(filteredListings);
-        setStatus("success");
-      };
-
-      filterListings();
-    } else {
-      setError("an error has occured");
-    }
-  }, [searchQuery]);
   return (
     <>
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
       <div className="flex justify-between">
         {searchQuery && <h2>Results for: {searchQuery}</h2>}
-        <FilterForm></FilterForm>
+        <FilterForm
+          onSubmitFilters={handleOnSubmitFilters}
+          defaultActive={active}
+          defaultSort={sortBy}
+          defaultOrder={sortOrder}
+          defaultTag={tag}
+        ></FilterForm>
       </div>
-      <Listings listings={listingsToDisplay} status={status} error={error} />
+      <Listings listings={listings} status={status} error={error} />
     </>
   );
 }
