@@ -26,7 +26,7 @@ function ListingsPage() {
       console.log(e);
     },
     onSuccess: (data) => {
-      setListingsToDisplay(data), setSearchQuery("");
+      setListingsToDisplay(data), setSearchQuery(null), setTag(null);
     },
   });
 
@@ -51,8 +51,8 @@ function ListingsPage() {
         setSortOrder(windowParams.get("sortOrder"));
       }
 
-      if (windowParams.get("tag")) {
-        setTag(windowParams.get("tag"));
+      if (windowParams.get("_tag")) {
+        setTag(windowParams.get("_tag"));
       }
 
       if (windowParams.get("active")) {
@@ -63,6 +63,8 @@ function ListingsPage() {
   });
 
   const handleOnRemoveSearch = async () => {
+    setTag(null);
+    setSearchQuery("");
     fetchMutation.mutate(sortBy, sortOrder, null, active, "");
     navigate({ to: "/listings" });
   };
@@ -73,11 +75,10 @@ function ListingsPage() {
     const sortOrderValue = e.target.sortOrder.value;
     const tagValue = e.target.tag.value;
     const activePostsValue = e.target.activePostsOnly[1].checked;
-    console.log(activePostsValue);
     let tagParam = "";
 
     if (tagValue.length > 0) {
-      tagParam = `&_tag?${tagValue}`;
+      tagParam = `&_tag=${tagValue}`;
     }
 
     setSortBy(sortByValue);
@@ -111,11 +112,25 @@ function ListingsPage() {
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
       <div className="flex justify-between">
         <div>
-          <h2>Results for: {searchQuery ? searchQuery : "all posts"}</h2>{" "}
-          <Button onClick={handleOnRemoveSearch}>x</Button>
+          <h2>
+            Results for: {searchQuery || (tag ? `Tag: ${tag}` : "All posts")}
+          </h2>
+          {searchQuery ||
+            (tag && (
+              <>
+                <Button onClick={handleOnRemoveSearch}>x</Button>
+                <Button
+                  onClick={() => {
+                    console.log(searchQuery);
+                  }}
+                >
+                  test
+                </Button>
+              </>
+            ))}
           <Button
             onClick={() => {
-              console.log(searchQuery);
+              console.log(tag);
             }}
           >
             test
@@ -130,6 +145,9 @@ function ListingsPage() {
           defaultTag={tag}
         ></FilterForm>
       </div>
+      {status === "success" && !listings && listingsToDisplay.length < 1 && (
+        <h2>Could not find any matching listings</h2>
+      )}
       <Listings listings={listingsToDisplay} status={status} error={error} />
     </>
   );

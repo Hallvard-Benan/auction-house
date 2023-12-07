@@ -25,13 +25,6 @@ function FilterForm({
   const [sortBy, setSortBy] = useState(defaultSort);
   const [isActivePostsChecked, setIsActivePostsChecked] =
     useState(defaultActive);
-  const [sortValue, setSortValue] = useState(defaultSort);
-  const [orderValue, setOrderValue] = useState(defaultOrder);
-  const [tag, setTag] = useState(defaultTag);
-
-  const handleOnChangeTag = (e) => {
-    setTag(e.target.value);
-  };
 
   const togglePopoverOpen = () => {
     setPopoverOpen((prev) => !prev);
@@ -78,7 +71,7 @@ function FilterForm({
               <SelectItem value="desc">
                 Descending{" "}
                 {sortBy === "title"
-                  ? " (A-Z)"
+                  ? " (Z-A)"
                   : sortBy === "created"
                   ? " (Newest)"
                   : null}
@@ -86,7 +79,7 @@ function FilterForm({
               <SelectItem value="asc">
                 Ascending{" "}
                 {sortBy === "title"
-                  ? " (Z-A)"
+                  ? " (A-Z)"
                   : sortBy === "created"
                   ? " (Oldest)"
                   : null}
@@ -113,11 +106,10 @@ function FilterForm({
           <div>
             <Label htmlFor="tag">Chose a tag:</Label>
             <Input
-              onChange={handleOnChangeTag}
-              value={tag}
+              defaultValue={defaultTag}
               id="tag"
               name="tag"
-              placeholder="'phone', 'fashion' etc. "
+              placeholder={defaultTag ? defaultTag : "'phone', 'fashion' etc. "}
             ></Input>
           </div>
           <div className="flex justify-between">

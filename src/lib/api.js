@@ -25,7 +25,7 @@ export async function fetchAllListings(
   if (tag?.length > 0) {
     params.append("_tag", tag);
   }
-  const res = await axios.get(`${baseUrl}/listings?${params.toString()}`);
+  const res = await axios.get(`${baseUrl}/listings?${params?.toString()}`);
   console.log(res);
   return res.data;
 }

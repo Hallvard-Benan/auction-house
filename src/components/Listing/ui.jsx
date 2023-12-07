@@ -81,7 +81,7 @@ function ListingUi({
             <Tag editable={false} key={index} text={tagName} />
           ))}
         </div>
-        <p>{created}</p>
+        <p>created: {created}</p>
         <p>{tags[0]}</p>
         <p>{updated}</p>
         <CountdownTimer endsAt={endsAt} />

@@ -31,6 +31,7 @@ function ListingsUi({ listings = [] }) {
               >
                 <CardContent className="px-0 col-span-1 overflow-hidden h-[20rem]">
                   <img
+                    loading="lazy"
                     src={
                       media && media[0]
                         ? media[0]

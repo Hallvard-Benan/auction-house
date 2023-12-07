@@ -4,7 +4,7 @@ import SearchBar from "../components/ui/searchBar";
 import { search } from "../lib/search";
 import { fetchAllListings } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
+import Tags from "../components/Forms/tags";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -32,7 +32,6 @@ function HomePage() {
   useEffect(() => {
     const windowParams = new URLSearchParams(window.location.search);
     const urlSearchQuery = windowParams.get("search");
-    console.log("url search query>>>", urlSearchQuery);
 
     if (urlSearchQuery) {
       setSearchQuery(urlSearchQuery);
@@ -82,6 +81,7 @@ function HomePage() {
   return (
     <main className="grid gap-6">
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
+      <Tags variant="link"></Tags>
       {searchQuery && <h2>Results for: {searchQuery}</h2>}
       <Listings status={status} error={error} listings={listingsToDisplay} />
       <div className="flex gap-2">

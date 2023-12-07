@@ -1,76 +1,3 @@
-// import React from "react";
-
-// import { Input } from "../ui/input";
-// import { Button } from "../ui/button";
-// import { TfiClose } from "react-icons/tfi";
-// import { CiCirclePlus } from "react-icons/ci";
-
-// // icons for popular tags
-// import { FaCar, FaLaptop, FaMobileAlt, FaWineGlass } from "react-icons/fa";
-// import { FaHouseChimney, FaShirt } from "react-icons/fa6";
-
-// import { useState } from "react";
-
-// function Images({ images = [], onImagesChange }) {
-//   const [image, setImage] = useState("");
-
-//   const handleTagChange = function (e) {
-//     setImage(e.target.value);
-//     console.log(e.target.value);
-//   };
-
-//   const addImage = function (imageToAdd) {
-//     if (!images.includes(imageToAdd) && imageToAdd.length > 0) {
-//       onImagesChange([...images, imageToAdd]);
-//     }
-//     setImage("");
-//   };
-
-//   const removeImage = function (tagToRemove) {
-//     const upToDateTags = images.filter((tag) => tag !== tagToRemove);
-//     onImagesChange(upToDateTags);
-//   };
-
-//   return (
-//     <>
-//       <div className="grid gap-4">
-//         <div className="flex">
-//           <Input
-//             onChange={handleTagChange}
-//             placeholder="Add an image url"
-//             id="tag"
-//             value={image}
-//           />
-//           <Button
-//             type="button"
-//             onClick={() => addImage(image)}
-//             className="flex gap-1 bg-primary"
-//           >
-//             <p>Add tag</p> <CiCirclePlus size={28} />
-//           </Button>
-//         </div>
-//       </div>
-//       {images.length > 0 && (
-//         <div id="tagBox" className="flex flex-wrap gap-2">
-//           {images.map((imageUrl) => (
-//             <div key={imageUrl}>
-//               <img src={imageUrl} alt="" />
-//               <Button
-//                 onClick={() => removeImage(imageUrl)}
-//                 className="rounded-full aspect-square p-0 bg-muted hover:bg-destructive-1/2 hover:text-destructive text-muted-foreground w-8 h-8"
-//               >
-//                 <TfiClose />
-//                 <Input className="hidden"></Input>
-//               </Button>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </>
-//   );
-// }
-
-// export default Images;
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -87,11 +14,37 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
     console.log(e.target.value);
   };
 
+  const isValidImageUrl = (url) => {
+    // Regular expression to match common image file extensions
+    const imageExtensions = /\.(jpeg|jpg|gif|png|webp)$/i;
+
+    // Check if the URL ends with a valid image extension
+    if (url.match(imageExtensions)) {
+      return true;
+    }
+
+    // Alternatively, you can also perform a more robust check by attempting to load the image
+    const img = new Image();
+    img.src = url;
+
+    // If the image can be loaded successfully, consider it a valid image URL
+    return img.complete && img.naturalWidth > 0;
+  };
   const addImage = function (imageToAdd) {
-    if (!images.includes(imageToAdd) && imageToAdd.length > 0) {
+    if (
+      isValidImageUrl(imageToAdd) &&
+      !images.includes(imageToAdd) &&
+      imageToAdd.length > 0
+    ) {
       onImagesChange([...images, imageToAdd]);
-      onImageAdd();
-    } else setError("Cannot submit same image multiple times");
+      setError(null);
+    } else if (images.includes(imageToAdd)) {
+      setError("Cannot submit same image multiple times");
+    } else if (!isValidImageUrl(imageToAdd)) {
+      setError(
+        "Must be a valid URL to a publicly available image, ending in .jpg .png etc."
+      );
+    }
     setImage("");
   };
 
@@ -101,7 +54,7 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
   };
 
   return (
-    <>
+    <div className="grid gap-3">
       {active && (
         <div>
           <div className="grid gap-4">
@@ -148,7 +101,7 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }
 

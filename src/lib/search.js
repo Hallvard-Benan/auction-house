@@ -14,16 +14,16 @@ export async function search(sortBy, sortOrder, tag, active, query) {
         sortBy,
         sortOrder,
         searchTag,
-        active.toString()
+        active
       );
 
-      if (response.length === 0) {
+      if (!response || response.length === 0) {
         break;
       }
 
       // Filter listings based on the query
       const filteredListings =
-        query.length > 0 ? filterSearch(response, query) : response;
+        query?.length > 0 ? filterSearch(response, query) : response;
 
       // Concatenate the filtered listings to the result
       allFilteredListings = [...allFilteredListings, ...filteredListings];
