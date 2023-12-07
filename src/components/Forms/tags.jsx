@@ -53,7 +53,7 @@ function Tags({
     return (
       <>
         <div className="grid gap-4">
-          <div className=" flex justify-evenly gap-2 overflow-x-scroll flex-wrap sm:gap-4">
+          <div className=" flex justify-evenly gap-2 flex-wrap sm:gap-4">
             {popularTags.map((item) => (
               <Category
                 key={item.name}
@@ -92,13 +92,17 @@ function Tags({
     );
   else if (variant === "link")
     return (
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-wrap gap-2">
         {popularTags.map((item) => (
           <Link
             key={item.name}
             to={`/listings?_tag=${item.name.toLowerCase()}`}
           >
-            <Category item={item} selected={tags.includes(item.name)} />
+            <Category
+              type="link"
+              item={item}
+              selected={tags.includes(item.name)}
+            />
           </Link>
         ))}
       </div>
