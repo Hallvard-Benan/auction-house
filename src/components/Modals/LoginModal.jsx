@@ -13,6 +13,8 @@ function LoginModal() {
   const queryClient = useQueryClient();
   const [modalVersion, setModalVersion] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const changeModalType = function (type) {
@@ -45,21 +47,27 @@ function LoginModal() {
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
     onError: (res) => {
-      console.log(res);
+      setError(res.message);
+    },
+    onMutate: () => {
+      setIsLoading(true);
     },
     onSuccess: (res) => {
+      setIsLoading(false);
+      closeModal();
       login(res);
-      console.log("success>>>", res.accessToken);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
       navigate({ to: "/" });
-      closeModal();
     },
   });
 
   const registerUserMutation = useMutation({
     mutationFn: registerUser,
-    onError: (err) => {
-      console.log(err);
+    onError: (res) => {
+      setError(res.message);
+    },
+    onMutate: () => {
+      setIsLoading(true);
     },
     onSuccess: (res) => {
       console.log("registered successfully", res.email);
@@ -71,31 +79,28 @@ function LoginModal() {
 
   const handleOnSubmitRegister = function (event) {
     event.preventDefault();
+    console.log(event);
+
+    const name = event.target.nameRegister.value;
+    const email = event.target.emailRegister.value;
+    const password = event.target.passwordRegister.value;
+    const avatar = event.target.avatarRegister.value;
+
     registerUserMutation.mutate({
-      name: event.target.nameRegister.value,
-      email: event.target.emailRegister.value,
-      password: event.target.passwordRegister.value,
-      avatar: event.target.avatarRegister.value,
+      name,
+      email,
+      password,
+      avatar,
     });
   };
 
-  const handleOnSubmitLogin = function (event) {
+  const handleOnSubmitLogin = async function (event) {
     event.preventDefault();
-
     loginUserMutation.mutate({
       email: event.target.email.value,
       password: event.target.password.value,
     });
   };
-
-  if (loginUserMutation.isError)
-    return <div>{loginUserMutation.error.message}</div>;
-
-  if (registerUserMutation.isError)
-    return <div> {registerUserMutation.error.message}</div>;
-
-  if (loginUserMutation.isPending || registerUserMutation.isPending)
-    return <div>loading...</div>;
 
   return (
     <div className="flex gap-2 items-center">
@@ -109,6 +114,8 @@ function LoginModal() {
         handleOnSubmitLogin={handleOnSubmitLogin}
         closeModal={closeModal}
         open={modalOpen}
+        error={error}
+        loading={loading}
         handleOnSubmitRegister={handleOnSubmitRegister}
       />
     </div>

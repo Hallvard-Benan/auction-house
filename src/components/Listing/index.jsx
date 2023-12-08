@@ -26,7 +26,7 @@ function Listing() {
   const handleOnSubmitBid = (e) => {
     e.preventDefault();
     const bidAmount = parseInt(e.target.bid.value);
-    const availableFunds = authUser.authUserCredits;
+    const availableFunds = authUser.credits;
     if (bidAmount <= availableFunds) {
       submitBidMutation.mutate(bidAmount);
     } else setError("not enough funds");
@@ -40,7 +40,7 @@ function Listing() {
   useEffect(() => {
     if (status === "success" && listing && listing.seller && authUser) {
       console.log(authUser);
-      setIsMyPost(listing.seller.email === authUser.authEmail);
+      setIsMyPost(listing.seller.email === authUser.email);
     }
   }, [status, listing, authUser]);
 

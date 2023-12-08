@@ -17,10 +17,11 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       setIsLoggedIn(true);
       setAuthUser({
-        authEmail: window.localStorage.getItem("user_email"),
-        authUserName: window.localStorage.getItem("user_name"),
-        authUserCredits: window.localStorage.getItem("user_credits"),
-        authUserToken: window.localStorage.getItem("access_token"),
+        email: window.localStorage.getItem("user_email"),
+        name: window.localStorage.getItem("user_name"),
+        credits: window.localStorage.getItem("user_credits"),
+        token: window.localStorage.getItem("access_token"),
+        avatar: window.localStorage.getItem("access_token"),
       });
     }
   }, []);
@@ -29,8 +30,10 @@ export const AuthProvider = ({ children }) => {
     window.localStorage.setItem("access_token", userData.accessToken);
     window.localStorage.setItem("user_email", userData.email);
     window.localStorage.setItem("user_name", userData.name);
+    window.localStorage.setItem("user_avatar", userData.avatar);
     window.localStorage.setItem("user_credits", userData.credits);
     setAuthUser(userData);
+    console.log("auth user is >>>", userData.name);
     setIsLoggedIn(true);
   };
 

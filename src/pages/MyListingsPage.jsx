@@ -3,7 +3,8 @@ import ListingsByUser from "../components/Listings/byUser";
 
 function MyListingsPage() {
   const { authUser } = useAuth();
-  return <ListingsByUser user={authUser.authUserName} />;
+
+  if (authUser) return <ListingsByUser user={authUser.name} />;
 }
 
 export default MyListingsPage;

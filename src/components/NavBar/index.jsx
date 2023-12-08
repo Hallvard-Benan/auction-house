@@ -4,8 +4,6 @@ import NavBarUi from "./ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-// const profileLink = `/profile?name=${authUser.name}`;
-
 function NavBar() {
   const { isLoggedIn, logout, authUser } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -16,11 +14,12 @@ function NavBar() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (authUser) {
-      const nameOfUser = authUser.authUserName;
+    if (authUser && isLoggedIn) {
+      const nameOfUser = authUser.name;
       setUserName(nameOfUser);
+      console.log(nameOfUser);
     }
-  }, [authUser]);
+  }, [authUser, isLoggedIn]);
 
   useEffect(() => {
     const handleScroll = () => {

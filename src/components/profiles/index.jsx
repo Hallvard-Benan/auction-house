@@ -37,15 +37,13 @@ function Profile() {
 
   useEffect(() => {
     if (status === "success" && profile && authUser) {
-      setIsMyProfile(profile.email === authUser.authEmail);
+      setIsMyProfile(profile.email === authUser.email);
     }
   }, [status, profile, authUser]);
 
   const handleOnSubmitAvatar = function (e) {
     e.preventDefault();
     const avatar = e.target.avatarUrl.value;
-
-    const data = { avatar, profileName };
 
     updateAvatarMutation.mutate({ avatar, profileName });
 

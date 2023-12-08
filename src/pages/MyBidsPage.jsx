@@ -8,8 +8,8 @@ function MyBidsPage() {
 
   useEffect(() => {
     if (authUser) {
-      const { authUserName } = authUser;
-      setName(authUserName);
+      const authName = authUser.name;
+      setName(authName);
     }
   }, [authUser]);
 
