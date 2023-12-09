@@ -10,6 +10,11 @@ function Listing() {
   const [error, setError] = useState(null);
   const { authUser, isLoggedIn } = useAuth();
   const queryClient = useQueryClient();
+  const [availableCredits, setAvailableCredits] = useState(0);
+
+  useEffect(() => {
+    if (authUser) setAvailableCredits(authUser.credits);
+  }, [authUser]);
 
   const searchParams = new URLSearchParams(window.location.search);
   const listingId = searchParams.get("id");
@@ -17,10 +22,11 @@ function Listing() {
   const submitBidMutation = useMutation({
     mutationFn: makeBid,
     onError: (err) => console.log(err),
-    onSuccess: () =>
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["listing", listingId],
-      }),
+      });
+    },
   });
 
   const handleOnSubmitBid = (e) => {
@@ -29,6 +35,8 @@ function Listing() {
     const availableFunds = authUser.credits;
     if (bidAmount <= availableFunds) {
       submitBidMutation.mutate(bidAmount);
+      setAvailableCredits((prev) => prev - bidAmount);
+      e.target.reset();
     } else setError("not enough funds");
   };
 
@@ -39,7 +47,6 @@ function Listing() {
 
   useEffect(() => {
     if (status === "success" && listing && listing.seller && authUser) {
-      console.log(authUser);
       setIsMyPost(listing.seller.email === authUser.email);
     }
   }, [status, listing, authUser]);
@@ -52,6 +59,7 @@ function Listing() {
       <ListingUi
         loggedIn={isLoggedIn}
         myPost={isMyPost}
+        id={listing.id}
         title={listing.title}
         description={listing.description}
         media={listing.media}
@@ -64,6 +72,7 @@ function Listing() {
         seller={listing.seller}
         onSubmitBid={handleOnSubmitBid}
         _count={listing._count}
+        availableCredits={availableCredits}
       />
     );
 }

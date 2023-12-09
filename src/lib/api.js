@@ -26,7 +26,6 @@ export async function fetchAllListings(
     params.append("_tag", tag);
   }
   const res = await axios.get(`${baseUrl}/listings?${params?.toString()}`);
-  console.log(res);
   return res.data;
 }
 

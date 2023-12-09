@@ -25,17 +25,24 @@ function CountdownTimer({ endsAt }) {
       setTimeRemaining(calculateTimeRemaining());
     }, 1000);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(timerInterval);
   }, [endsAt]);
 
+  if (
+    timeRemaining.days <= 0 &&
+    timeRemaining.hours <= 0 &&
+    timeRemaining.minutes <= 0 &&
+    timeRemaining.seconds <= 0
+  ) {
+    return <p className="text-destructive">Auction has ended</p>;
+  }
+
   return (
-    <div>
-      <p>Time Remaining:</p>
-      <p>{timeRemaining.days} days</p>
-      <p>{timeRemaining.hours} hours</p>
-      <p>{timeRemaining.minutes} minutes</p>
-      {timeRemaining.hours < 2 && <p>{timeRemaining.seconds} seconds</p>}
+    <div className="flex gap-2 font-medium">
+      {timeRemaining.days >= 1 && <p>{timeRemaining.days} days</p>}
+      {timeRemaining.days < 2 && <p>{timeRemaining.hours} hours</p>}
+      {timeRemaining.days < 2 && <p>{timeRemaining.minutes} minutes</p>}
+      {timeRemaining.days < 1 && <p>{timeRemaining.seconds} seconds</p>}
     </div>
   );
 }

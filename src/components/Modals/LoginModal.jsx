@@ -8,7 +8,7 @@ import { useAuth } from "../../Context/AuthContext";
 
 import LoginModalUi from "./ui";
 
-function LoginModal() {
+function LoginModal({ link }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [modalVersion, setModalVersion] = useState("");
@@ -57,7 +57,7 @@ function LoginModal() {
       closeModal();
       login(res);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
-      navigate({ to: "/" });
+      // navigate({ to: link });
     },
   });
 

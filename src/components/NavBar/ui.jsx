@@ -64,7 +64,7 @@ function NavBarUi({ loggedIn, visible, fixed, handleLogout, profileLink }) {
           </div>{" "}
         </>
       ) : (
-        <LoginModal />
+        <LoginModal link={"/"} />
       )}
     </nav>
   );

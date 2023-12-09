@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { getProfile } from "../lib/api";
 
 const AuthContext = createContext({
   authUser: null,
@@ -13,17 +14,22 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = window.localStorage.getItem("access_token");
+    const name = window.localStorage.getItem("user_name");
 
-    if (token) {
-      setIsLoggedIn(true);
-      setAuthUser({
-        email: window.localStorage.getItem("user_email"),
-        name: window.localStorage.getItem("user_name"),
-        credits: window.localStorage.getItem("user_credits"),
-        token: window.localStorage.getItem("access_token"),
-        avatar: window.localStorage.getItem("access_token"),
-      });
-    }
+    const fetchUserData = async () => {
+      if (token && name) {
+        setIsLoggedIn(true);
+        try {
+          const userData = await getProfile(name);
+          console.log(userData);
+          setAuthUser(userData);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserData(); // Invoke the async function here
   }, []);
 
   const login = (userData) => {
