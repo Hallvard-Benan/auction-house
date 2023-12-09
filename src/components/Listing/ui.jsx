@@ -6,6 +6,16 @@ import { useAuth } from "/src/Context/AuthContext";
 import CountdownTimer from "../ui/countDown";
 import Carousel from "../ui/carousel";
 import LoginModal from "../Modals/LoginModal";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 import { useEffect, useState } from "react";
 function ListingUi({
@@ -66,7 +76,7 @@ function ListingUi({
             />
           </div>
           {/* høyre side */}
-          <div className="grid md:col-span-2 md:h-80 items-stretch">
+          <div className="grid md:col-span-2 md:h-96 items-stretch">
             <div className="flex flex-col gap-2">
               <h1 className="text-3xl md:text-4xl">{title}</h1>
               {loggedIn ? (
@@ -100,10 +110,12 @@ function ListingUi({
               <CountdownTimer endsAt={endsAt} />
             </div>
             <div className="grid gap-2">
-              <div className="flex text-xl font-semibold text-neutral-700">
+              <div className="flex text-lg font-semibold text-neutral-700">
                 {_count.bids > 0 ? (
                   <h3>
-                    <span className="text-primary">${highestBid.amount}</span>{" "}
+                    <span className="text-primary text-2xl">
+                      ${highestBid.amount}
+                    </span>{" "}
                     Current bid
                   </h3>
                 ) : (
@@ -132,36 +144,67 @@ function ListingUi({
         </div>
 
         {/* mer info */}
-        <section>
-          <h2 className="text:xl md:text-2xl">Description</h2>
-          <p>{description}</p>
-          <h3 className="text-lg">Tags:</h3>
-          <div className="flex">
-            {tags.map((tagName, index) => (
-              <Tag editable={false} key={index} text={tagName} />
-            ))}
-          </div>
-          <p>created: {created}</p>
-          <p>{tags[0]}</p>
-          <p>{updated}</p>
-          <p>{endsAt}</p>
-        </section>
-        <section>
-          <h2>Bid history:</h2>
-          {_count.bids > 0 ? (
-            <div>
-              <p> bids {_count.bids}</p>
-              <div>
-                {sortedBids.map((bid, index) => (
-                  <div key={index}>{bid.amount}</div>
-                ))}
+        <section className="w-full md:col-span-2">
+          <Tabs
+            defaultValue="details"
+            className="w-full grid border-2 rounded-md"
+          >
+            <TabsList className="w-full justify-evenly md:p-6 ">
+              <TabsTrigger className="md:text-xl" value="details">
+                Details
+              </TabsTrigger>
+              <TabsTrigger className="md:text-xl" value="bids">
+                Bid History
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent className="grid gap-6" value="details">
+              <div className="grid gap-2">
+                <h2 className="text:xl md:text-2xl font-medium">
+                  Description:
+                </h2>
+                <p>{description}</p>
               </div>
-            </div>
-          ) : (
-            <p>No bids yet</p>
-          )}
+
+              <div className="grid gap-2">
+                <h2 className="text:xl md:text-2xl font-medium">Tags:</h2>
+                <div className="flex flex-wrap gap-1">
+                  {tags.map((tagName, index) => (
+                    <Tag editable={false} key={index} text={tagName} />
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p>Last updated: {updated}</p>
+                <p>Auction ends: {formattedDate(endsAt)}</p>
+              </div>
+            </TabsContent>
+
+            <TabsContent className="grid gap-4" value="bids">
+              <h2 className="text:xl md:text-2xl font-medium">Bids:</h2>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="">Date</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead className="">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedBids.map((bid, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">
+                        {formattedDate(bid.created)}
+                      </TableCell>
+                      <TableCell>{bid.bidderName}</TableCell>
+                      <TableCell>{bid.amount} $</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TabsContent>
+          </Tabs>
         </section>
-        {/* {JSON.stringify(bids)} */}
       </div>
     </>
   );

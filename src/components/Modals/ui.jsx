@@ -62,7 +62,7 @@ function LoginModalUi({
     } else if (input === "avatarRegister") {
       if (!validateAvatar(avatar)) {
         setAvatarError(
-          "avatar must be a link to a publicly available image, ending in .jpg, .png etc "
+          "Avatar must be a link to a publicly available image, ending in .jpg, .png etc "
         );
       } else {
         setAvatarError("");
@@ -143,7 +143,7 @@ function LoginModalUi({
     },
     {
       index: 3,
-      label: "Avatar",
+      label: "Profile picture",
       id: "avatarRegister",
       placeholder: "URL to your avatar image",
       required: false,

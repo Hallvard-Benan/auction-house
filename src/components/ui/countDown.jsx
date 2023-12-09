@@ -42,7 +42,7 @@ function CountdownTimer({ endsAt }) {
       {timeRemaining.days >= 1 && <p>{timeRemaining.days} days</p>}
       {timeRemaining.days < 2 && <p>{timeRemaining.hours} hours</p>}
       {timeRemaining.days < 2 && <p>{timeRemaining.minutes} minutes</p>}
-      {timeRemaining.days < 1 && <p>{timeRemaining.seconds} seconds</p>}
+      {timeRemaining.hours < 1 && <p>{timeRemaining.seconds} seconds</p>}
     </div>
   );
 }

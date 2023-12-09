@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaChevronRight } from "react-icons/fa6";
 
 function Carousel({ images = [] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -29,13 +30,14 @@ function Carousel({ images = [] }) {
       >
         {images.length > 1 && (
           <button
+            className="text-2xl -rotate-180 hover:text-primary"
             onClick={() => {
               if (currentSlide !== 0) {
                 setCurrentSlide((prev) => prev - 1);
               } else setCurrentSlide(images.length - 1);
             }}
           >
-            {"< prev"}
+            <FaChevronRight />
           </button>
         )}
         <div
@@ -62,13 +64,14 @@ function Carousel({ images = [] }) {
         </div>
         {images.length > 1 && (
           <button
+            className="text-2xl hover:text-primary"
             onClick={() => {
               if (currentSlide !== images.length - 1) {
                 setCurrentSlide((prev) => prev + 1);
               } else setCurrentSlide(0);
             }}
           >
-            {"next >"}
+            <FaChevronRight />
           </button>
         )}
       </div>
