@@ -13,6 +13,5 @@ export const validateAvatar = (avatar) => {
 };
 
 export const validatePassword = (password) => {
-  console.log("passwordvalidation>>> ", password.length >= 8);
   return password.length >= 8;
 };

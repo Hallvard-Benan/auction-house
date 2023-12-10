@@ -85,6 +85,7 @@ export async function createListing({
   media,
   endsAt,
 }) {
+  const accessToken = window.localStorage.getItem("access_token");
   try {
     const res = await axios.post(
       `${baseUrl}/listings`,
@@ -110,6 +111,7 @@ export async function createListing({
 }
 
 export async function updateProfileImage(avatar, name) {
+  const accessToken = window.localStorage.getItem("access_token");
   const res = await axios.put(
     `${baseUrl}/profiles/${name}/media`,
     {

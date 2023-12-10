@@ -30,7 +30,6 @@ export default function CreateListingForm() {
       setStatus("error");
     },
     onSuccess: (res) => {
-      console.log(res);
       setStatus("success");
       setTimeout(() => navigate({ to: `/listing?id=${res.id}` }), 2000);
     },
@@ -87,7 +86,7 @@ export default function CreateListingForm() {
     return (
       <form
         onSubmit={onSubmit}
-        className=" grid gap-6 max-w-xl mx-auto bg-secondary/40 p-4 sm:p-8 rounded-md"
+        className=" grid gap-6  mx-auto bg-secondary/40 p-4 sm:p-8 rounded-md"
       >
         <fieldset>
           <Label htmlFor="title">

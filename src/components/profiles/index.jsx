@@ -1,6 +1,6 @@
 import { getProfile } from "/src/lib/api";
 import { useAuth } from "/src/Context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -11,7 +11,7 @@ import { updateProfileImage } from "/src/lib/api";
 
 function Profile() {
   const [isMyProfile, setIsMyProfile] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const queryClient = useQueryClient();
 
   const updateAvatarMutation = useMutation({
     mutationFn: (data) => {
@@ -20,8 +20,8 @@ function Profile() {
     onError: (err) => {
       console.log(err);
     },
-    onSuccess: (res) => {
-      console.log(res);
+    onSuccess: () => {
+      queryClient.invalidateQueries(["profile"], profileName);
     },
   });
 
@@ -46,12 +46,6 @@ function Profile() {
     const avatar = e.target.avatarUrl.value;
 
     updateAvatarMutation.mutate({ avatar, profileName });
-
-    setIsEditing(false);
-  };
-
-  const handleOnOpenEdit = function () {
-    setIsEditing(true);
   };
 
   if (status === "pending") return <div>Loading...</div>;
@@ -59,7 +53,7 @@ function Profile() {
   if (status === "error") return <div>Error:</div>;
   if (status === "success")
     return (
-      <>
+      <div className="grid gap-10">
         <ProfileUi
           myProfile={isMyProfile}
           name={profile.name}
@@ -67,12 +61,13 @@ function Profile() {
           credits={profile.credits}
           wins={profile.wins}
           _count={profile._count}
-          isEditing={isEditing}
-          onOpenEdit={handleOnOpenEdit}
           onSubmitAvatar={handleOnSubmitAvatar}
         ></ProfileUi>
-        <ListingsByUser user={profileName} />
-      </>
+        <section className="grid gap-4">
+          <h2 className="text-2xl">Recent posts from {profileName}:</h2>
+          <ListingsByUser user={profileName} />
+        </section>
+      </div>
     );
 }
 

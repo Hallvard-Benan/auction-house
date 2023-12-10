@@ -2,9 +2,9 @@ import React from "react";
 
 function Category({ selected, item, handleToggleCategory, type }) {
   const classNames = [
-    "cursor-pointer hover:bg-secondary w-24 sm:w-32 grid content-center gap-1 justify-items-center rounded-md py-2 px-4 border",
+    "cursor-pointer hover:bg-secondary grid content-center gap-1 justify-items-center rounded-md py-2 px-4 border",
     selected && "bg-secondary",
-    type === "link" && "w-36 hover:text-primary",
+    type === "link" && " hover:text-primary",
   ];
 
   return (
