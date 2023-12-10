@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "/src/Context/AuthContext";
 import { useEffect, useState } from "react";
 import { makeBid } from "/src/lib/api";
+import SkeletonListing from "./loading";
 
 function Listing() {
   const [isMyPost, setIsMyPost] = useState(false);
@@ -40,7 +41,11 @@ function Listing() {
     } else setError("not enough funds");
   };
 
-  const { status, data: listing } = useQuery({
+  const {
+    status,
+    data: listing,
+    error: dataError,
+  } = useQuery({
     queryKey: ["listing", listingId],
     queryFn: () => fetchOneListing(listingId),
   });
@@ -51,9 +56,9 @@ function Listing() {
     }
   }, [status, listing, authUser]);
 
-  if (status === "pending") return <div>Loading...</div>;
+  if (status === "pending") return <SkeletonListing />;
 
-  if (status === "error") return <div>Error:</div>;
+  if (status === "error") return <div>{dataError.message}</div>;
   if (status === "success")
     return (
       <ListingUi

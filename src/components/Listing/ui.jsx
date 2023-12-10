@@ -62,7 +62,7 @@ function ListingUi({
         <Button onClick={() => setIsEditing(true)}>Edit listing</Button>
       )}
       <div className="grid grid-cols-1 justify-items-center md:justify-items-stretch md:grid-cols-2 gap-6 overflow-hidden">
-        <div className="cols-span-1 md:col-span-2 grid md:grid-cols-5 md:h-96 gap-6 md:gap-8">
+        <div className="cols-span-1 md:col-span-2 grid md:grid-cols-5 md:h-96 gap-4 md:gap-8">
           {/* venstre side / carousel */}
           <div className="h-72 w-calc md:h-96 md:w-auto col-span-1 md:col-span-3">
             <Carousel
@@ -76,19 +76,19 @@ function ListingUi({
             />
           </div>
           {/* høyre side */}
-          <div className="grid md:col-span-2 md:h-96 items-stretch">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-3xl md:text-4xl">{title}</h1>
+          <div className="grid md:col-span-2 md:h-96 items-stretch gap-6">
+            <div className="flex flex-col gap-4 overflow-hidden">
+              <h1 className="text-3xl md:text-4xl break-words ">{title}</h1>
               {loggedIn ? (
                 <Link to={profileLink}>
-                  <div className="flex gap-2 group">
+                  <div className="flex gap-2 group bg-primary/10 p-2 rounded-md">
                     <img
                       src={seller.avatar}
                       alt={"avatar image for " + seller.name}
                       className="h-12 w-12 rounded-full"
                     />
                     <div>
-                      <p className="text-xl font-medium group-hover:text-primary">
+                      <p className="text-xl font-medium  group-hover:text-primary">
                         {seller.name}
                       </p>
                       <p className="text-sm font-medium text-secondary-foreground/70">
@@ -98,17 +98,30 @@ function ListingUi({
                   </div>
                 </Link>
               ) : (
-                <div className="flex gap-1">
-                  <p>{seller.name}</p>
-                  <img src={seller.avatar} alt="" className="h-8" />
+                <div>
+                  <div className="flex gap-2 group">
+                    <img
+                      src={seller.avatar}
+                      alt={"avatar image for " + seller.name}
+                      className="h-12 w-12 rounded-full"
+                    />
+                    <div>
+                      <p className="text-xl font-medium">{seller.name}</p>
+                      <p className="text-sm font-medium text-secondary-foreground/70">
+                        Posted on {formattedDate(created)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-2">
-              <p>Auction ends in: </p>
-              <CountdownTimer endsAt={endsAt} />
-            </div>
+            <CountdownTimer
+              endsAt={endsAt}
+              longFormat={true}
+              className="text-lg md:text-xl"
+            />
+
             <div className="grid gap-2">
               <div className="flex text-lg font-semibold text-neutral-700">
                 {_count.bids > 0 ? (
