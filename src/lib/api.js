@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const baseUrl = import.meta.env.VITE_API_URL;
-const accessToken = window.localStorage.getItem("access_token");
 
 export async function fetchAllListings(
   pageNumber,
@@ -30,6 +29,8 @@ export async function fetchAllListings(
 }
 
 export async function fetchAllListingsByUser(name) {
+  const accessToken = window.localStorage.getItem("access_token");
+
   const res = await axios.get(
     `${baseUrl}/profiles/${name}/listings?_bids=true&_seller=true&sort=created&sortOrder=desc`,
     {
@@ -59,6 +60,7 @@ export async function registerUser({ email, name, password, avatar }) {
 }
 
 export async function getProfile(name) {
+  const accessToken = window.localStorage.getItem("access_token");
   const res = await axios.get(`${baseUrl}/profiles/${name}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -123,6 +125,8 @@ export async function updateProfileImage(avatar, name) {
 }
 
 export async function makeBid(amount) {
+  const accessToken = window.localStorage.getItem("access_token");
+
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get("id");
   const res = await axios.post(
@@ -140,6 +144,8 @@ export async function makeBid(amount) {
 }
 
 export async function getBidsByProfile(name) {
+  const accessToken = window.localStorage.getItem("access_token");
+
   const res = await axios.get(
     `${baseUrl}/profiles/${name}/bids?_listings=true&_bids=true&_seller=true`,
     {
