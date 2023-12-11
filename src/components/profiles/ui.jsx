@@ -1,7 +1,10 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { FaEdit } from "react-icons/fa";
+import { Label } from "../ui/label";
 import { X } from "lucide-react";
+import { FaCheck } from "react-icons/fa";
+
 import {
   Dialog,
   DialogClose,
@@ -23,7 +26,7 @@ function ProfileUi({
 
   return (
     <div className="max-w-full grid gap-4 overflow-hidden">
-      <div className="grid justify-items-center md:justify-items-stretch md:grid-cols-2 gap-2">
+      <div className="grid md:flex md:justify-center gap-2 md:gap-4">
         <div className="grid gap-2 justify-items-center">
           <img
             src={
@@ -54,7 +57,8 @@ function ProfileUi({
                     alt="new avatar"
                   />
                 </div>
-                <form className="flex gap-1 md:h-12" onSubmit={onSubmitAvatar}>
+                <form className="grid gap-3" onSubmit={onSubmitAvatar}>
+                  <Label htmlFor="avatarUrl">Image url:</Label>
                   <Input
                     defaultValue={avatar}
                     type="text"
@@ -64,31 +68,57 @@ function ProfileUi({
                     }}
                     placeholder="Image URL"
                     name="avatarUrl"
-                    className="h-full md:w-64"
+                    className="h-10 md:h-14"
                   />
-                  <Button className="h-full" type="submit">
-                    Submit change
-                  </Button>
+                  <div className="flex justify-between h-10 md:h-14">
+                    <DialogClose>
+                      <Button
+                        className="h-full bg-muted text-destructive hover:bg-destructive/10"
+                        type="button"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button className="h-full flex gap-2 group" type="submit">
+                      <p>Confirm change</p>
+                      <p className="group-hover:text-green-400 transition-all duration-200">
+                        <FaCheck />
+                      </p>
+                    </Button>
+                  </div>
                 </form>
               </DialogContent>
             </Dialog>
           )}
         </div>
 
-        <div className="grid gap-2">
-          <h1 className="text-3xl md:text-4xl break-all">{name}</h1>
-          <div>
-            <p>
-              Available Credits:{" "}
-              <span className="text-lg font-medium">${credits}</span>
-            </p>
-            <p>
-              Wins: <span className="text-lg font-medium">{wins.length}</span>
-            </p>
-            <p>
-              Listings{" "}
-              <span className="text-lg font-medium">{_count.listings}</span>
-            </p>
+        <div className="flex flex-col justify-center gap-4">
+          <h1 className="text-4xl md:text-5xl break-all text-center md:w-[400px]">
+            {name}
+          </h1>
+          <div className="bg-white rounded-lg p-4 flex justify-evenly gap-16 md:gap-20 mx-auto">
+            <div>
+              <p className="text-lg font-medium text-center md:text-xl">
+                {_count.listings}
+              </p>
+              <p className="text-muted-foreground text-sm md:text-base">
+                Listings
+              </p>
+            </div>
+            <div>
+              <p className="text-lg font-medium text-center md:text-xl">
+                ${credits}
+              </p>
+              <p className="text-muted-foreground text-sm md:text-base">
+                Credits
+              </p>
+            </div>
+            <div>
+              <p className="text-lg md:text-xl font-medium text-center">
+                {wins.length}
+              </p>
+              <p className="text-muted-foreground text-sm md:text-base">Wins</p>
+            </div>
           </div>
         </div>
       </div>

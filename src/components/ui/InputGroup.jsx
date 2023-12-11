@@ -11,10 +11,17 @@ function InputGroup({
   onBlur,
   value,
   onChange,
+  success,
+  description,
 }) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        {required && <span className="text-muted-foreground">*</span>}
+
+        {label}
+      </Label>
+
       <Input
         onChange={onChange}
         value={value}
@@ -24,9 +31,18 @@ function InputGroup({
         id={id}
         name={id}
         type={type ? type : "text"}
-        className={errorMessage && "border-destructive"}
+        className={
+          (errorMessage && "border-destructive") ||
+          (success && "border-green-500") ||
+          ""
+        }
       ></Input>
-      {errorMessage && <p className="text-destructive">{errorMessage}</p>}
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      )}
+      {errorMessage && (
+        <p className="text-sm text-destructive">{errorMessage}</p>
+      )}
     </div>
   );
 }

@@ -7,11 +7,15 @@ export const validateEmail = (email) => {
   return email.endsWith("@stud.noroff.no");
 };
 
-export const validateAvatar = (avatar) => {
-  const imageRegex = /\.(jpg|jpeg|png|gif|bmp)$/i;
-  return imageRegex.test(avatar);
-};
-
 export const validatePassword = (password) => {
   return password.length >= 8;
+};
+
+export const validateAvatar = async (url) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
 };

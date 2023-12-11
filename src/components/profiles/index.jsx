@@ -8,6 +8,7 @@ import ProfileUi from "./ui";
 
 import ListingsByUser from "../Listings/byUser";
 import { updateProfileImage } from "/src/lib/api";
+import SkeletonProfile from "./loading";
 
 function Profile() {
   const [isMyProfile, setIsMyProfile] = useState(false);
@@ -48,7 +49,7 @@ function Profile() {
     updateAvatarMutation.mutate({ avatar, profileName });
   };
 
-  if (status === "pending") return <div>Loading...</div>;
+  if (status === "success") return <SkeletonProfile />;
 
   if (status === "error") return <div>Error:</div>;
   if (status === "success")

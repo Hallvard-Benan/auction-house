@@ -7,7 +7,7 @@ function SearchBar({ onSubmitSearch }) {
         type="text"
         name="search"
         placeholder="What are you looking for?"
-        className="w-full relative h-14 px-4 border-solid rounded-full border-zinc-800 focus-within:border-2"
+        className="w-full relative h-14 px-4 border-solid rounded-full border-muted-foreground focus-within:border-2"
       />
       <button
         type="submit"

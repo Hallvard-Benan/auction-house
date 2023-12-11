@@ -9,7 +9,6 @@ import { useAuth } from "../../Context/AuthContext";
 import LoginModalUi from "./ui";
 
 function LoginModal({ link }) {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [modalVersion, setModalVersion] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -47,7 +46,14 @@ function LoginModal({ link }) {
   const loginUserMutation = useMutation({
     mutationFn: loginUser,
     onError: (res) => {
-      setError(res.message);
+      if (res.response.status === 401) {
+        setError(
+          "Failed to login. please check that your email and password are correct"
+        );
+      } else {
+        setError("Something went wrong, please try again", res.message);
+      }
+      setIsLoading(false);
     },
     onMutate: () => {
       setIsLoading(true);
@@ -57,13 +63,14 @@ function LoginModal({ link }) {
       closeModal();
       login(res);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
-      // navigate({ to: link });
     },
   });
 
   const registerUserMutation = useMutation({
     mutationFn: registerUser,
     onError: (res) => {
+      setIsLoading(false);
+      console.log(res);
       setError(res.message);
     },
     onMutate: () => {

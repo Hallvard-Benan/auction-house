@@ -9,11 +9,10 @@ import { Button } from "../components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 
 function HomePage() {
-  const [listingsToDisplay, setListingsToDisplay] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [limit, setLimit] = useState(100);
+  const [limit, setLimit] = useState(20);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLastPage, setIsLastPage] = useState(false);
   const [tag, setTag] = useState("");
@@ -29,37 +28,6 @@ function HomePage() {
     queryFn: () => fetchAllListings(pageNumber, limit, sortBy, sortOrder, tag),
     keepPreviousData: true,
   });
-  useEffect(() => {
-    const windowParams = new URLSearchParams(window.location.search);
-    const urlSearchQuery = windowParams.get("search");
-
-    if (urlSearchQuery) {
-      setSearchQuery(urlSearchQuery);
-      const filterListings = async () => {
-        const params = new URLSearchParams({
-          limit,
-          sortBy,
-          sortOrder,
-        });
-
-        // Check if listings is defined before using it
-        if (listings) {
-          const searchWord = urlSearchQuery.trim().toLowerCase();
-          const filteredListings = await search(params, searchWord);
-          setListingsToDisplay(filteredListings);
-          setIsLastPage(filteredListings.length < limit);
-        }
-      };
-
-      filterListings();
-    } else if (!urlSearchQuery) {
-      // Check if listings is defined before using it
-      if (listings) {
-        setListingsToDisplay(listings);
-      }
-    }
-  }, [searchQuery, limit, sortBy, sortOrder, listings]); // Add searchQuery to the dependencies
-
   const handleOnSubmitSearch = async (e) => {
     e.preventDefault();
     const searchValue = e.target.search.value;
@@ -71,27 +39,33 @@ function HomePage() {
     }
   };
 
-  useEffect(() => {
-    if (status === "success") {
-      setListingsToDisplay(listings);
-      setIsLastPage(listings.length < limit);
-    }
-  }, [status, listings, limit]);
-
   return (
     <main className="grid gap-6">
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
       <Tags variant="link"></Tags>
-      {searchQuery && <h2>Results for: {searchQuery}</h2>}
-      <Listings status={status} error={error} listings={listingsToDisplay} />
-      <div className="flex gap-2">
+      <div className="flex gap-4 mx-auto items-center">
         {pageNumber > 1 && (
           <Button onClick={() => setPageNumber((page) => page - 1)}>
-            go back
+            Last page
           </Button>
         )}
 
-        <div>{pageNumber}</div>
+        <div className="text-xl">Page {pageNumber}</div>
+        {!isLastPage && (
+          <Button onClick={() => setPageNumber((page) => page + 1)}>
+            Next page
+          </Button>
+        )}
+      </div>
+      <Listings status={status} error={error} listings={listings} />
+      <div className="flex gap-4 mx-auto items-center">
+        {pageNumber > 1 && (
+          <Button onClick={() => setPageNumber((page) => page - 1)}>
+            Last page
+          </Button>
+        )}
+
+        <div className="text-xl">Page {pageNumber}</div>
         {!isLastPage && (
           <Button onClick={() => setPageNumber((page) => page + 1)}>
             Next page

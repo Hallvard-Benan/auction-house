@@ -16,6 +16,7 @@ import {
   validateEmail,
   validatePassword,
 } from "/src/lib/validation";
+import Spinner from "../ui/spinner";
 
 function LoginModalUi({
   type,
@@ -29,56 +30,73 @@ function LoginModalUi({
 }) {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
+  const [nameSuccess, setNameSuccess] = useState(false);
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [emailSuccess, setEmailSuccess] = useState(false);
 
   const [avatar, setAvatar] = useState("");
+  const [avatarDescription, setAvatarDescription] = useState(
+    "Url to a publicly available image"
+  );
   const [avatarError, setAvatarError] = useState("");
+  const [avatarSuccess, setAvatarSuccess] = useState(false);
 
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
 
-  const [passwordRepeat, setPasswordRepeat] = useState("");
-  const [passwordRepeatError, setPasswordRepeatError] = useState("");
+  const verifiedRegister =
+    validateAvatar(avatar) &&
+    validateEmail(email) &&
+    !avatarError &&
+    validatePassword(password);
 
-  const handleOnValidate = (input) => {
-    console.log(input);
+  const verifiedLogin = validateEmail(email) && validatePassword(password);
+
+  const handleOnValidate = async (input) => {
     if (input === "email" || input === "emailRegister") {
       if (!validateEmail(email)) {
         setEmailError("Email must end in @stud.noroff.no.");
+        setEmailSuccess(false);
         return;
       } else {
         setEmailError("");
+        setEmailSuccess(true);
       }
     } else if (input === "name" || input === "nameRegister") {
       if (!validateName(name)) {
         setNameError(
           "Name must not contain punctuation symbols apart from underscore (_)"
         );
+        setNameSuccess(false);
       } else {
         setNameError("");
+        setNameSuccess(true);
       }
-    } else if (input === "avatarRegister") {
-      if (!validateAvatar(avatar)) {
-        setAvatarError(
-          "Avatar must be a link to a publicly available image, ending in .jpg, .png etc "
-        );
+    } else if (input === "avatarRegister" && avatar.length > 0) {
+      setAvatarDescription("Checking image source...");
+      const validatedImageUrl = await validateAvatar(avatar);
+      if (!validatedImageUrl) {
+        setAvatarDescription("");
+        setAvatarError("Avatar must be a link to a publicly available image");
+        setAvatarSuccess(false);
       } else {
+        setAvatarDescription("Avatar validated");
         setAvatarError("");
+        setAvatarSuccess(true);
       }
     } else if (input === "password" || input === "passwordRegister") {
       if (!validatePassword(password)) {
         setPasswordError("Password must be at least 8 characters");
+        setPasswordSuccess(false);
       } else {
         setPasswordError("");
+        setPasswordSuccess(true);
       }
-    } else if (input === "passwordRepeat") {
-      if (password !== passwordRepeat) {
-        setPasswordRepeatError("Passwords do not match");
-      } else {
-        setPasswordRepeatError("Passwords do not match");
-      }
+    } else if (input === "avatarRegister" && avatar.length === 0) {
+      setAvatarSuccess(false);
     }
   };
 
@@ -92,6 +110,7 @@ function LoginModalUi({
       placeholder: "...@stud.noroff.no",
       required: true,
       value: email,
+      success: emailSuccess,
       onChange: (e) => {
         setEmail(e.target.value);
         setEmailError("");
@@ -104,6 +123,7 @@ function LoginModalUi({
       placeholder: "********",
       required: true,
       type: "password",
+      success: passwordSuccess,
       value: password,
       errorMessage: passwordError,
       onChange: (e) => {
@@ -121,6 +141,7 @@ function LoginModalUi({
       placeholder: "Your username",
       required: true,
       errorMessage: nameError,
+      success: nameSuccess,
       value: name,
       onChange: (e) => {
         setName(e.target.value);
@@ -135,6 +156,7 @@ function LoginModalUi({
       placeholder: "...@stud.noroff.no",
       required: true,
       errorMessage: emailError,
+      success: emailSuccess,
       value: email,
       onChange: (e) => {
         setEmail(e.target.value);
@@ -145,9 +167,11 @@ function LoginModalUi({
       index: 3,
       label: "Profile picture",
       id: "avatarRegister",
-      placeholder: "URL to your avatar image",
+      placeholder: "https://www.image.jpg",
       required: false,
       errorMessage: avatarError,
+      success: avatarSuccess,
+      description: avatarDescription,
       value: avatar,
       onChange: (e) => {
         setAvatar(e.target.value);
@@ -157,6 +181,7 @@ function LoginModalUi({
     {
       index: 4,
       label: "Password",
+      success: passwordSuccess,
       id: "passwordRegister",
       placeholder: "********",
       type: "password",
@@ -168,26 +193,12 @@ function LoginModalUi({
         setPasswordError("");
       },
     },
-    {
-      index: 5,
-      label: "Repeat Password",
-      id: "passwordRepeat",
-      placeholder: "********",
-      type: "password",
-      required: true,
-      value: passwordRepeat,
-      errorMessage: passwordRepeatError,
-      onChange: (e) => {
-        setPasswordRepeat(e.target.value);
-        setPasswordRepeatError("");
-      },
-    },
   ];
 
   return (
     <Dialog open={open} onEscapeKeyPress={() => closeModal()}>
       {type === "login" && open ? (
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]  max-h-[100vh] overflow-y-auto">
           <DialogPrimitive.Close
             onClick={() => closeModal()}
             className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -198,7 +209,10 @@ function LoginModalUi({
           <DialogHeader>
             <DialogTitle>Log in</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleOnSubmitLogin} className="grid">
+          <form
+            onSubmit={handleOnSubmitLogin}
+            className="grid overflow-y-scroll"
+          >
             <div className="grid gap-4 py-4">
               {loginFormInputs.map(
                 ({
@@ -210,6 +224,7 @@ function LoginModalUi({
                   index,
                   errorMessage,
                   value,
+                  success,
                   onChange,
                 }) => (
                   <InputGroup
@@ -220,6 +235,7 @@ function LoginModalUi({
                     required={required}
                     placeholder={placeholder}
                     type={type}
+                    success={success}
                     errorMessage={errorMessage}
                     value={value}
                     onChange={onChange}
@@ -228,8 +244,8 @@ function LoginModalUi({
               )}
             </div>
             <div className="text-destructive">{error}</div>
-            <Button type="submit" className="">
-              Log in
+            <Button disabled={!verifiedLogin} type="submit" className="">
+              {loading ? <Spinner></Spinner> : "Log in"}
             </Button>
           </form>
           <DialogFooter className="grid gap-6 grid-cols-2">
@@ -242,7 +258,10 @@ function LoginModalUi({
           </DialogFooter>
         </DialogContent>
       ) : (
-        <DialogContent data-state="open" className="sm:max-w-[425px]">
+        <DialogContent
+          data-state="open"
+          className="sm:max-w-[425px] max-h-[100vh] overflow-y-auto"
+        >
           <DialogPrimitive.Close
             onClick={() => closeModal()}
             className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -253,7 +272,7 @@ function LoginModalUi({
           <DialogHeader>
             <DialogTitle>Register a new account</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleOnSubmitRegister}>
+          <form onSubmit={handleOnSubmitRegister} className="grid">
             <div className="grid gap-6 py-4">
               {registerFormInputs.map(
                 ({
@@ -265,15 +284,19 @@ function LoginModalUi({
                   index,
                   errorMessage,
                   value,
+                  description,
+                  success,
                   onChange,
                 }) => (
                   <InputGroup
                     onBlur={() => handleOnValidate(id)}
                     key={index}
                     label={label}
+                    description={description}
                     id={id}
                     value={value}
                     required={required}
+                    success={success}
                     placeholder={placeholder}
                     type={type}
                     errorMessage={errorMessage}
@@ -283,8 +306,8 @@ function LoginModalUi({
               )}
             </div>
             <div className="text-destructive">{error}</div>
-            <Button type="submit" className="col-span-2">
-              Register
+            <Button type="submit" disabled={!verifiedRegister}>
+              {loading ? <Spinner></Spinner> : "Register"}
             </Button>
           </form>
           <DialogFooter className="grid gap-6 grid-cols-2">
