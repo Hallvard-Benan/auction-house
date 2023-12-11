@@ -49,7 +49,7 @@ function Profile() {
     updateAvatarMutation.mutate({ avatar, profileName });
   };
 
-  if (status === "success") return <SkeletonProfile />;
+  if (status === "pending") return <SkeletonProfile />;
 
   if (status === "error") return <div>Error:</div>;
   if (status === "success")
