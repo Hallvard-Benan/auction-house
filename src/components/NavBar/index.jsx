@@ -17,12 +17,12 @@ function NavBar() {
     if (authUser && isLoggedIn) {
       const nameOfUser = authUser.name;
       setUserName(nameOfUser);
-      console.log(nameOfUser);
     }
   }, [authUser, isLoggedIn]);
 
   useEffect(() => {
     const handleScroll = () => {
+      console.log("scrolling", window.scrollY);
       if (window.scrollY > 60) {
         const currentScrollPos = window.scrollY;
         setVisible(
@@ -31,10 +31,13 @@ function NavBar() {
         );
         setScrollPosition(currentScrollPos);
         setFixed(true);
-      } else setFixed(false);
+      } else {
+        setVisible(true);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
