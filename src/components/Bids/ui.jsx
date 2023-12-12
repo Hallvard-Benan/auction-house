@@ -7,17 +7,11 @@ import {
   CardDescription,
 } from "../ui/card";
 
-import CountdownTimer from "../ui/countDown";
-
-function ListingsUi({ listings = [], variant }) {
-  const limitLength = function (str, max) {
-    return str.length > max ? str.slice(0, max) : str;
-  };
-
+function ListingsUi({ listings = [] }) {
   return (
     <section className="w-calc mx-auto">
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center align-center">
-        {listings.map(({ id, title, media, bids, endsAt }, index) => {
+        {listings.map(({ id, title, media, bids }, index) => {
           let highestBid = { amount: 0 };
 
           if (bids?.length > 0) {
@@ -29,7 +23,7 @@ function ListingsUi({ listings = [], variant }) {
           return (
             <Card
               key={index}
-              className="overflow-hidden grid h-[28rem] grid-cols-1 relative"
+              className="overflow-hidden grid justify-between h-[26rem] grid-cols-1 relative"
             >
               <Link
                 to={`/listing?id=${id}`}
@@ -44,24 +38,16 @@ function ListingsUi({ listings = [], variant }) {
                         : "https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"
                     }
                     alt={title}
-                    className="w-full h-[20rem] object-cover"
+                    className="w-full h-full object-cover"
                   />
                 </CardContent>
-                <CardFooter className="row-span-1 w-full grid">
-                  <CardTitle>
-                    {title.length < 20 ? title : limitLength(title, 55) + "..."}
-                  </CardTitle>
-                  {variant !== "bid" ? (
-                    <CardDescription>
-                      {highestBid.amount > 0
-                        ? `Highest Bid: ${highestBid.amount} $`
-                        : "No bids yet"}
-                    </CardDescription>
-                  ) : (
-                    <CardDescription>
-                      <CountdownTimer endsAt={endsAt}></CountdownTimer>
-                    </CardDescription>
-                  )}
+                <CardFooter className="row-span-1 w-full justify-between">
+                  <CardTitle>{title}</CardTitle>
+                  <CardDescription>
+                    {highestBid.amount > 0
+                      ? `Highest Bid: ${highestBid.amount} $`
+                      : "No bids yet"}
+                  </CardDescription>
                 </CardFooter>
               </Link>
             </Card>
