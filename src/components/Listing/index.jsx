@@ -12,6 +12,8 @@ function Listing() {
   const { authUser, isLoggedIn } = useAuth();
   const queryClient = useQueryClient();
   const [availableCredits, setAvailableCredits] = useState(0);
+  const [highestBid, setHighestBid] = useState([]);
+  const [sortedBids, setSortedBids] = useState([]);
 
   useEffect(() => {
     if (authUser) setAvailableCredits(authUser.credits);
@@ -32,13 +34,26 @@ function Listing() {
 
   const handleOnSubmitBid = (e) => {
     e.preventDefault();
+    setError(null);
+
     const bidAmount = parseInt(e.target.bid.value);
     const availableFunds = authUser.credits;
-    if (bidAmount <= availableFunds) {
+    let bidToBeat;
+    if (!highestBid) {
+      bidToBeat = 0;
+    } else {
+      bidToBeat = highestBid.amount;
+    }
+
+    if (bidAmount <= availableFunds && bidAmount > bidToBeat) {
       submitBidMutation.mutate(bidAmount);
       setAvailableCredits((prev) => prev - bidAmount);
       e.target.reset();
-    } else setError("not enough funds");
+    } else if (bidAmount <= bidToBeat) {
+      setError(`Bid must be higher than the current bid of: $${bidToBeat}`);
+    } else if (bidAmount > availableFunds) {
+      setError("Not enough funds");
+    }
   };
 
   const {
@@ -53,6 +68,12 @@ function Listing() {
   useEffect(() => {
     if (status === "success" && listing && listing.seller && authUser) {
       setIsMyPost(listing.seller.email === authUser.email);
+      setHighestBid(
+        listing.bids.reduce((maxBid, currentBid) => {
+          return currentBid.amount > maxBid.amount ? currentBid : maxBid;
+        }, listing.bids[0])
+      );
+      setSortedBids(listing.bids.sort((a, b) => b.amount - a.amount));
     }
   }, [status, listing, authUser]);
 
@@ -73,7 +94,8 @@ function Listing() {
         updated={listing.updated}
         error={error}
         endsAt={listing.endsAt}
-        bids={listing.bids}
+        sortedBids={sortedBids}
+        highestBid={highestBid}
         seller={listing.seller}
         onSubmitBid={handleOnSubmitBid}
         _count={listing._count}

@@ -2,7 +2,6 @@ import { Input } from "../ui/input";
 import { Link } from "@tanstack/react-router";
 import { Button } from "../ui/button";
 import Tag from "../ui/tag";
-import { useAuth } from "/src/Context/AuthContext";
 import CountdownTimer from "../ui/countDown";
 import Carousel from "../ui/carousel";
 import LoginModal from "../Modals/LoginModal";
@@ -10,14 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "../ui/table";
 
-import { useEffect, useState } from "react";
 function ListingUi({
   title = "",
   description = "",
@@ -27,7 +24,8 @@ function ListingUi({
   updated = "",
   endsAt = "",
   id,
-  bids = [],
+  highestBid,
+  sortedBids,
   seller = {},
   _count = {},
   myPost = false,
@@ -36,12 +34,6 @@ function ListingUi({
   availableCredits,
   onSubmitBid = () => {},
 }) {
-  const sortedBids = bids.sort((a, b) => b.amount - a.amount);
-
-  const highestBid = bids.reduce((maxBid, currentBid) => {
-    return currentBid.amount > maxBid.amount ? currentBid : maxBid;
-  }, bids[0]);
-
   const profileLink = `/profile?name=${seller.name}`;
 
   const formattedDate = function (originalDate) {
@@ -127,7 +119,7 @@ function ListingUi({
                 {_count.bids > 0 ? (
                   <h3>
                     <span className="text-primary text-2xl">
-                      ${highestBid.amount}
+                      ${highestBid?.amount}
                     </span>{" "}
                     Current bid
                   </h3>
@@ -149,7 +141,7 @@ function ListingUi({
                     <Button type="submit">place bid</Button>
                   </form>
                   <p>Available funds: ${availableCredits}</p>
-                  {error && <p>{error}</p>}
+                  {error && <p className="text-destructive">{error}</p>}
                 </div>
               )}
             </div>
