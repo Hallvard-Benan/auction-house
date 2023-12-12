@@ -21,15 +21,15 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         try {
           const userData = await getProfile(name);
-          console.log(userData);
           setAuthUser(userData);
+          console.log("petters data eh>>", userData);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
       }
     };
 
-    fetchUserData(); // Invoke the async function here
+    fetchUserData();
   }, []);
 
   const login = (userData) => {
@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     window.localStorage.setItem("user_avatar", userData.avatar);
     window.localStorage.setItem("user_credits", userData.credits);
     setAuthUser(userData);
-    console.log("auth user is >>>", userData.name);
     setIsLoggedIn(true);
   };
 

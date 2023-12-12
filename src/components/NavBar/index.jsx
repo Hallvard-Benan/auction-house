@@ -6,43 +6,46 @@ import { useNavigate } from "@tanstack/react-router";
 
 function NavBar() {
   const { isLoggedIn, logout, authUser } = useAuth();
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [fixed, setFixed] = useState(false);
   const [userName, setUserName] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (authUser && isLoggedIn) {
-      const nameOfUser = authUser.name;
-      setUserName(nameOfUser);
+    if (authUser) {
+      setUserName(authUser.name);
+      setAvatar(authUser.avatar);
+      setUserEmail(authUser.email);
     }
-  }, [authUser, isLoggedIn]);
+  }, [authUser]);
 
   useEffect(() => {
+    let prevScrollPos = window.scrollY;
+
     const handleScroll = () => {
-      console.log("scrolling", window.scrollY);
-      if (window.scrollY > 60) {
-        const currentScrollPos = window.scrollY;
-        setVisible(
-          (scrollPosition > currentScrollPos && window.scrollY !== 20) ||
-            (currentScrollPos < 10 && window.scrollY !== 20)
-        );
-        setScrollPosition(currentScrollPos);
-        setFixed(true);
+      const currentScrollPos = window.scrollY;
+
+      if (currentScrollPos > 60) {
+        // Scrolled down
+        setVisible(prevScrollPos > currentScrollPos);
       } else {
+        // Scrolled up or less than 60 pixels
         setVisible(true);
       }
+
+      prevScrollPos = currentScrollPos;
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    handleScroll(); // Call it once to set the initial state
 
+    // Return the cleanup function
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [scrollPosition]);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -55,10 +58,12 @@ function NavBar() {
 
   return (
     <NavBarUi
+      avatar={avatar}
+      userEmail={userEmail}
       profileLink={profileLink}
+      userName={userName}
       loggedIn={isLoggedIn}
       visible={visible}
-      fixed={fixed}
       handleLogout={handleLogout}
     />
   );

@@ -37,15 +37,23 @@ function CountdownTimer({ endsAt, longFormat, className }) {
     return <p className={`text-destructive ${className}`}>Auction has ended</p>;
   }
 
+  const shortTimeLeft = timeRemaining.days < 1 && "text-destructive";
+
   return (
     <div className={`flex gap-2 font-medium ${className}`}>
       {longFormat === true && (
         <p className="font font-normal">Auction ends in:</p>
       )}
       {timeRemaining.days >= 1 && <p>{timeRemaining.days} days</p>}
-      {timeRemaining.days < 2 && <p>{timeRemaining.hours} hours</p>}
-      {timeRemaining.days < 2 && <p>{timeRemaining.minutes} minutes</p>}
-      {timeRemaining.days <= 1 && <p>{timeRemaining.seconds} seconds</p>}
+      {timeRemaining.days < 2 && timeRemaining.hours > 0 && (
+        <p className={shortTimeLeft}>{timeRemaining.hours} hours</p>
+      )}
+      {timeRemaining.days < 2 && (
+        <p className={shortTimeLeft}>{timeRemaining.minutes} minutes</p>
+      )}
+      {timeRemaining.days <= 1 && (
+        <p className={shortTimeLeft}>{timeRemaining.seconds} seconds</p>
+      )}
     </div>
   );
 }

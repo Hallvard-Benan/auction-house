@@ -23,7 +23,7 @@ function ListingsUi({ listings = [] }) {
           return (
             <Card
               key={id}
-              className="overflow-hidden grid justify-between h-[26rem] grid-cols-1"
+              className="overflow-hidden grid justify-between h-[26rem] grid-cols-1 relative"
             >
               <Link
                 to={`/listing?id=${id}`}

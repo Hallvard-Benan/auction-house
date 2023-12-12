@@ -7,7 +7,7 @@ function App() {
     <>
       <ScrollRestoration />
       <div className="w-calc mx-auto grid gap-4">
-        <div className="h-20">
+        <div className="md:h-20">
           <NavBar className="w-full" />
         </div>
         <Outlet />
