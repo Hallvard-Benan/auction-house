@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
         try {
           const userData = await getProfile(name);
           setAuthUser(userData);
-          console.log("petters data eh>>", userData);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }

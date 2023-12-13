@@ -11,6 +11,7 @@ function App() {
           <NavBar className="w-full" />
         </div>
         <Outlet />
+        <div className="h-20"></div>
       </div>
     </>
   );

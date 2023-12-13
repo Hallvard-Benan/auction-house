@@ -1,11 +1,10 @@
-import React from "react";
 import Listings from "../components/Listings";
-import { search } from "../lib/search";
+import { filterSearch, search } from "../lib/search";
 import FilterForm from "../components/FilterForm";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import SearchBar from "../components/ui/searchBar";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 
 function ListingsPage() {
@@ -13,29 +12,21 @@ function ListingsPage() {
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
   const [limit, setLimit] = useState(100);
+  const [initialListings, setInitialListings] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [tag, setTag] = useState("");
   const [listingsToDisplay, setListingsToDisplay] = useState([]);
   const [active, setActive] = useState(true);
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const fetchMutation = useMutation({
-    mutationFn: search,
-    onError: (e) => {
-      console.log(e);
-    },
-    onSuccess: (data) => {
-      setListingsToDisplay(data), setSearchQuery(null), setTag(null);
-    },
-  });
+  // this is when i started messing up
 
   const {
     status,
     error,
     data: listings,
   } = useQuery({
-    queryKey: ["all listings", tag, active, sortBy, sortOrder, searchQuery],
+    queryKey: ["all listings", tag, active, sortBy, sortOrder],
     queryFn: () => {
       const windowParams = new URLSearchParams(window.location.search);
 
@@ -53,20 +44,38 @@ function ListingsPage() {
 
       if (windowParams.get("_tag")) {
         setTag(windowParams.get("_tag"));
-      }
+      } else setTag("");
 
-      if (windowParams.get("active")) {
-        setActive(windowParams.get("active"));
-      }
-      return search(sortBy, sortOrder, tag, active, searchQuery);
+      if (windowParams.get("active") === "false") {
+        setActive(false);
+      } else setActive(true);
+      return search(tag, active, sortBy, sortOrder);
     },
   });
 
+  useEffect(() => {
+    if (status === "success" && listings) {
+      setInitialListings(listings);
+      if (listings && searchQuery) {
+        const filteredListings = filterSearch(initialListings, searchQuery);
+        setListingsToDisplay(filteredListings);
+      } else {
+        setListingsToDisplay(initialListings);
+      }
+    }
+  }, [listings, initialListings, searchQuery, status]);
+
   const handleOnRemoveSearch = async () => {
-    setTag(null);
     setSearchQuery("");
-    fetchMutation.mutate(sortBy, sortOrder, null, active, "");
     navigate({ to: "/listings" });
+    setListingsToDisplay(initialListings);
+  };
+
+  const handleOnRemoveTag = () => {
+    navigate({
+      to: `/listings?search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}&active=${active}`,
+    });
+    setTag("");
   };
 
   const handleOnSubmitFilters = (e) => {
@@ -101,42 +110,33 @@ function ListingsPage() {
       });
     }
     setSearchQuery(searchWord);
+    e.target.reset();
   };
-
-  useEffect(() => {
-    status === "success" && setListingsToDisplay(listings);
-  }, [status, listings]);
 
   return (
     <>
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
       <div className="flex justify-between">
+        {searchQuery && (
+          <div>
+            <h2>Results for: {searchQuery}</h2>
+            <Button onClick={handleOnRemoveSearch}>x</Button>
+          </div>
+        )}
+        {tag && (
+          <div>
+            <h2>Results for: Tag - {tag}</h2>
+            <Button onClick={handleOnRemoveTag}>x</Button>
+          </div>
+        )}
+        {!searchQuery && !tag && <h2>Results for: All posts</h2>}
         <div>
-          <h2>
-            Results for: {searchQuery || (tag ? `Tag: ${tag}` : "All posts")}
-          </h2>
-          {searchQuery ||
-            (tag && (
-              <>
-                <Button onClick={handleOnRemoveSearch}>x</Button>
-                <Button
-                  onClick={() => {
-                    console.log(searchQuery);
-                  }}
-                >
-                  test
-                </Button>
-              </>
-            ))}
-          <Button
-            onClick={() => {
-              console.log(tag);
-            }}
-          >
-            test
-          </Button>
+          <p className="text-muted-foreground">{sortBy}</p>
+          <p className="text-muted-foreground">{sortOrder}</p>
+          <p className="text-muted-foreground">
+            {active ? "active only" : "Include inactive"}
+          </p>
         </div>
-
         <FilterForm
           onSubmitFilters={handleOnSubmitFilters}
           defaultActive={active}

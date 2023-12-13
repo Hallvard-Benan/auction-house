@@ -19,7 +19,9 @@ export async function fetchAllListings(
   sortOrder && params.append("sortOrder", sortOrder);
   params.append("limit", limit.toString());
   params.append("offset", offset.toString());
-  active && params.append("_active", active);
+  if (active === true || active === null || active === undefined)
+    params.append("_active", "true");
+  else params.append("_active", "false");
 
   if (tag?.length > 0) {
     params.append("_tag", tag);
@@ -66,7 +68,6 @@ export async function getProfile(name) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(res.data);
   return res.data;
 }
 

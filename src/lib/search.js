@@ -1,57 +1,52 @@
 import { fetchAllListings } from "./api";
 
-export async function search(sortBy, sortOrder, tag, active, query) {
-  let allFilteredListings = [];
+export async function search(tag, active, sortBy, sortOrder) {
+  let allListings = [];
   let pageNumber = 1;
   const searchLimit = 100;
   const searchTag = tag;
+  const searchActive = active;
+  const searchSortBy = sortBy;
+  const searchSortOrder = sortOrder;
 
   try {
     while (true) {
       const response = await fetchAllListings(
         pageNumber,
         searchLimit,
-        sortBy,
-        sortOrder,
+        searchSortBy,
+        searchSortOrder,
         searchTag,
-        active
+        searchActive
       );
 
       if (!response || response.length === 0) {
         break;
       }
 
-      // Filter listings based on the query
-      const filteredListings =
-        query?.length > 0 ? filterSearch(response, query) : response;
+      allListings = [...allListings, ...response];
 
-      // Concatenate the filtered listings to the result
-      allFilteredListings = [...allFilteredListings, ...filteredListings];
-
-      // Update page number for the next iteration
       pageNumber++;
     }
   } catch (error) {
     console.error("Error searching through pages:", error);
 
-    // Log the error array directly
     console.log("Error array:", error);
   }
 
-  return allFilteredListings;
+  return allListings;
 }
 
-function filterSearch(listings, query) {
+export const filterSearch = function (listings, query) {
   query = query.toUpperCase();
 
-  return listings.filter(({ title, description, tags }) => {
+  return listings.filter(({ title, description }) => {
     return (
       toUpperCase(title).includes(query) ||
-      toUpperCase(description).includes(query) ||
-      toUpperCase(tags.join()).includes(query)
+      toUpperCase(description).includes(query)
     );
   });
-}
+};
 
 function toUpperCase(str) {
   return str ? str.toUpperCase() : "";
