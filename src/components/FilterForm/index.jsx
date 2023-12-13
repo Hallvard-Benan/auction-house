@@ -38,7 +38,7 @@ function FilterForm({
     <Popover open={popoverOpen}>
       <PopoverTrigger
         onClick={togglePopoverOpen}
-        className="flex items-center gap-1"
+        className="flex items-center gap-1 border-2 p-2 rounded-md"
       >
         <h3 className="text-lg">Filters</h3>
         <p className="text-lg">

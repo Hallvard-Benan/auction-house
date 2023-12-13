@@ -6,6 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import SearchBar from "../components/ui/searchBar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
+import Tag from "../components/ui/tag";
 
 function ListingsPage() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -116,34 +117,60 @@ function ListingsPage() {
   return (
     <>
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
-      <div className="flex justify-between">
-        {searchQuery && (
-          <div>
-            <h2>Results for: {searchQuery}</h2>
-            <Button onClick={handleOnRemoveSearch}>x</Button>
-          </div>
-        )}
-        {tag && (
-          <div>
-            <h2>Results for: Tag - {tag}</h2>
-            <Button onClick={handleOnRemoveTag}>x</Button>
-          </div>
-        )}
-        {!searchQuery && !tag && <h2>Results for: All posts</h2>}
-        <div>
-          <p className="text-muted-foreground">{sortBy}</p>
-          <p className="text-muted-foreground">{sortOrder}</p>
-          <p className="text-muted-foreground">
-            {active ? "active only" : "Include inactive"}
-          </p>
+      <div className="flex flex-col-reverse gap-2 md:flex-row justify-between">
+        <div className="flex items-center gap-1 flex-wrap">
+          <h2>Results for:</h2>
+          {searchQuery && (
+            <div className="flex gap-1 items-center">
+              <h2>Search term: </h2>
+              <Tag
+                text={searchQuery}
+                editable={true}
+                handleOnRemove={handleOnRemoveSearch}
+              />
+            </div>
+          )}
+
+          {tag && (
+            <div className="flex gap-1 items-center">
+              <h2>Tag: </h2>
+              <Tag
+                text={tag}
+                editable={true}
+                handleOnRemove={handleOnRemoveTag}
+              />
+            </div>
+          )}
+          {!searchQuery && !tag && <h2>All posts</h2>}
         </div>
-        <FilterForm
-          onSubmitFilters={handleOnSubmitFilters}
-          defaultActive={active}
-          defaultSort={sortBy}
-          defaultOrder={sortOrder}
-          defaultTag={tag}
-        ></FilterForm>
+        <div className="flex flex-col items-center md:items-end">
+          <div className=" p-2 flex justify-center">
+            <FilterForm
+              onSubmitFilters={handleOnSubmitFilters}
+              defaultActive={active}
+              defaultSort={sortBy}
+              defaultOrder={sortOrder}
+              defaultTag={tag}
+            ></FilterForm>
+          </div>
+          <div className="flex gap-2">
+            <p className="text-muted-foreground">
+              Sorting by: {sortBy === "created" ? "Date" : "Title"}
+            </p>
+            <p className="text-muted-foreground">
+              {sortOrder === "asc" && sortBy === "created"
+                ? "Oldest"
+                : sortOrder === "asc" && sortBy === "title"
+                ? "A-Z"
+                : sortOrder === "desc" && sortBy === "title"
+                ? "Z-A"
+                : "Newest"}
+            </p>
+            <p className="text-muted-foreground">
+              {active ? "Active listings only" : "Include inactive listings"}
+            </p>
+          </div>
+        </div>
       </div>
       {status === "success" && !listings && listingsToDisplay.length < 1 && (
         <h2>Could not find any matching listings</h2>

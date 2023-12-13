@@ -54,13 +54,13 @@ export default function CreateListingForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const formattedTags = tags.map((tag) => tag.toLowerCase());
 
-    // Collect data from form components
     const formData = {
       endsAt: date,
       title: title,
       description: description,
-      tags: tags,
+      tags: formattedTags,
       media: images,
     };
 
