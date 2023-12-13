@@ -23,6 +23,7 @@ function InputGroup({
       </Label>
 
       <Input
+        autocomplete="true"
         onChange={onChange}
         value={value}
         required={required}

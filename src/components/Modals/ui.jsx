@@ -17,6 +17,7 @@ import {
   validatePassword,
 } from "/src/lib/validation";
 import Spinner from "../ui/spinner";
+import { toast } from "sonner";
 
 function LoginModalUi({
   type,
@@ -65,7 +66,7 @@ function LoginModalUi({
         setEmailError("");
         setEmailSuccess(true);
       }
-    } else if (input === "name" || input === "nameRegister") {
+    } else if (input === "name") {
       if (!validateName(name)) {
         setNameError(
           "Name must not contain punctuation symbols apart from underscore (_)"
@@ -137,7 +138,7 @@ function LoginModalUi({
     {
       index: 1,
       label: "Name",
-      id: "nameRegister",
+      id: "name",
       placeholder: "Your username",
       required: true,
       errorMessage: nameError,

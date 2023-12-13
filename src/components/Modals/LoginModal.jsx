@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { useAuth } from "../../Context/AuthContext";
+import { toast } from "sonner";
 
 import LoginModalUi from "./ui";
 
@@ -60,6 +61,7 @@ function LoginModal({ link }) {
     },
     onSuccess: (res) => {
       setIsLoading(false);
+      toast.success(`Welcome back, ${res.name}`, { duration: 2000 });
       closeModal();
       login(res);
       queryClient.invalidateQueries({ queryKey: ["listings"] });
@@ -76,10 +78,9 @@ function LoginModal({ link }) {
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: (res) => {
-      console.log("registered successfully", res.email);
-      window.localStorage.setItem("email", res.email);
-
+    onSuccess: () => {
+      toast.success("Registration successful!", { duration: 2000 });
+      setIsLoading(false);
       setModalVersion("login");
     },
   });
@@ -88,7 +89,7 @@ function LoginModal({ link }) {
     event.preventDefault();
     console.log(event);
 
-    const name = event.target.nameRegister.value;
+    const name = event.target.name.value;
     const email = event.target.emailRegister.value;
     const password = event.target.passwordRegister.value;
     const avatar = event.target.avatarRegister.value;

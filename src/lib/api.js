@@ -107,7 +107,7 @@ export async function createListing({
     return res.data;
   } catch (error) {
     console.error("Error creating listing:", error);
-    throw error; // Rethrow the error to let the calling code handle it
+    throw error;
   }
 }
 

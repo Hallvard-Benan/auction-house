@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getProfile } from "../lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 const AuthContext = createContext({
   authUser: null,
@@ -11,25 +12,28 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [profileName, setProfileName] = useState(null);
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile", profileName],
+    queryFn: () => getProfile(profileName),
+    enabled: !!profileName,
+  });
 
   useEffect(() => {
     const token = window.localStorage.getItem("access_token");
     const name = window.localStorage.getItem("user_name");
-
-    const fetchUserData = async () => {
-      if (token && name) {
-        setIsLoggedIn(true);
-        try {
-          const userData = await getProfile(name);
-          setAuthUser(userData);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        }
-      }
-    };
-
-    fetchUserData();
+    if (token && name) {
+      setProfileName(name);
+    }
   }, []);
+
+  useEffect(() => {
+    if (profile) {
+      setAuthUser(profile);
+      setIsLoggedIn(true);
+    }
+  }, [profile]);
 
   const login = (userData) => {
     window.localStorage.setItem("access_token", userData.accessToken);

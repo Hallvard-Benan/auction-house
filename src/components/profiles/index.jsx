@@ -3,6 +3,9 @@ import { useAuth } from "/src/Context/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { validateAvatar } from "/src/lib/validation";
+import { useNavigate } from "@tanstack/react-router";
 
 import ProfileUi from "./ui";
 
@@ -12,29 +15,29 @@ import SkeletonProfile from "./loading";
 
 function Profile() {
   const [isMyProfile, setIsMyProfile] = useState(false);
+  const [profileName, setProfileName] = useState(null);
   const queryClient = useQueryClient();
-
-  const updateAvatarMutation = useMutation({
-    mutationFn: (data) => {
-      updateProfileImage(data.avatar, data.profileName);
-    },
-    onError: (err) => {
-      console.log(err);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["profile"], profileName);
-    },
-  });
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const profileName = searchParams.get("name");
-
-  const { status, data: profile } = useQuery({
-    queryKey: ["profile", profileName],
-    queryFn: () => getProfile(profileName),
-  });
-
+  const navigate = useNavigate();
   const { authUser } = useAuth();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const name = searchParams.get("name");
+    setProfileName(name);
+  }, []);
+
+  const {
+    error,
+    status,
+    data: profile,
+  } = useQuery({
+    queryKey: ["profile", profileName],
+    queryFn: () => {
+      console.log("getting profile");
+      return getProfile(profileName);
+    },
+    enabled: !!profileName,
+  });
 
   useEffect(() => {
     if (status === "success" && profile && authUser) {
@@ -42,16 +45,47 @@ function Profile() {
     }
   }, [status, profile, authUser]);
 
-  const handleOnSubmitAvatar = function (e) {
+  const handleOnSubmitAvatar = async function (e) {
     e.preventDefault();
     const avatar = e.target.avatarUrl.value;
+    const validatedImageUrl = await validateAvatar(avatar);
 
-    updateAvatarMutation.mutate({ avatar, profileName });
+    if (!validatedImageUrl) {
+      toast.error("Invalid Image url", { duration: 2000 });
+    } else if (validatedImageUrl && avatar !== profile.avatar) {
+      updateAvatarMutation.mutate({ avatar, profileName });
+    } else toast.error("New image must be different", { duration: 2000 });
   };
+
+  const updateAvatarMutation = useMutation({
+    mutationFn: (data) => {
+      updateProfileImage(data.avatar, data.profileName);
+    },
+    onError: () => {
+      toast.error("Failed to update avatar");
+    },
+    onSuccess: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["profile", profileName] });
+      }, 200);
+
+      navigate({ to: `/profile`, search: { name: profileName } });
+    },
+  });
 
   if (status === "pending") return <SkeletonProfile />;
 
-  if (status === "error") return <div>Error:</div>;
+  if (status === "error")
+    return (
+      <div>
+        Something went wrong!{" "}
+        {error.message.includes("401")
+          ? "Not authorized, Please log in"
+          : error.message.includes("404")
+          ? "Profile does not exist"
+          : error.message}
+      </div>
+    );
   if (status === "success")
     return (
       <div className="grid gap-10">
