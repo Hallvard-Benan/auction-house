@@ -1,8 +1,7 @@
-import React from "react";
-
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CiCirclePlus } from "react-icons/ci";
+import { Label } from "../ui/label";
 
 // icons for popular tags
 import { FaCar, FaLaptop, FaMobileAlt, FaWineGlass } from "react-icons/fa";
@@ -12,14 +11,7 @@ import { useState } from "react";
 import Category from "../ui/category";
 import { Link } from "@tanstack/react-router";
 
-function Tags({
-  tags = [],
-  onTagsChange,
-  active,
-  onTagsAdd,
-  onTagsRemove,
-  variant,
-}) {
+function Tags({ tags = [], onTagsChange, onTagsAdd, onTagsRemove, variant }) {
   const [tag, setTag] = useState("");
   const [error, setError] = useState("");
 
@@ -42,17 +34,26 @@ function Tags({
       !lowerCaseTags.includes(tagToAdd.toLowerCase()) &&
       tagToAdd.length > 0
     ) {
+      setTag("");
+      setError("");
       onTagsChange([...tags, tagToAdd]);
       onTagsAdd();
     } else if (lowerCaseTags.includes(tagToAdd.toLowerCase()))
       setError("Tags must be unique, cannot submit multiple of the same tag");
-    setTag("");
   };
 
   if (variant === "form")
     return (
       <>
         <div className="grid gap-4">
+          <Label htmlFor="tag">Tags:</Label>
+          <div>
+            {tags.length < 1 && (
+              <h3 className="text-sm text-muted-foreground">
+                Select from popular tags, or add you own tag below.
+              </h3>
+            )}
+          </div>
           <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
             {popularTags.map((item) => (
               <Category
@@ -67,26 +68,32 @@ function Tags({
               />
             ))}
           </div>
-          {active && (
-            <div>
-              <div className="flex">
-                <Input
-                  onChange={handleTagChange}
-                  placeholder="Add new tag"
-                  id="tag"
-                  value={tag}
-                />
-                <Button
-                  type="button"
-                  onClick={() => addTag(tag)}
-                  className="flex gap-1 bg-primary"
-                >
-                  <p>Add tag</p> <CiCirclePlus size={28} />
-                </Button>
-              </div>
-              <p className="text-destructive">{error}</p>
+
+          <div>
+            <div className="flex">
+              <Input
+                onChange={handleTagChange}
+                placeholder="Add new tag"
+                id="tag"
+                value={tag}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Prevents the default action of the enter key in a form
+                    addTag(tag);
+                  }
+                }}
+              />
+
+              <Button
+                type="button"
+                onClick={() => addTag(tag)}
+                className="flex gap-1 bg-primary"
+              >
+                <p>Add tag</p> <CiCirclePlus size={28} />
+              </Button>
             </div>
-          )}
+            <p className="text-destructive">{error}</p>
+          </div>
         </div>
       </>
     );

@@ -3,6 +3,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { TfiClose } from "react-icons/tfi";
 import { CiCirclePlus } from "react-icons/ci";
+import { Label } from "../ui/label";
+import { validateAvatar } from "/src/lib/validation";
 
 function Images({ images = [], onImagesChange, active, onImageAdd }) {
   const [image, setImage] = useState("");
@@ -11,28 +13,12 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
 
   const handleImageChange = function (e) {
     setImage(e.target.value);
-    console.log(e.target.value);
   };
 
-  const isValidImageUrl = (url) => {
-    // Regular expression to match common image file extensions
-    const imageExtensions = /\.(jpeg|jpg|gif|png|webp)$/i;
-
-    // Check if the URL ends with a valid image extension
-    if (url.match(imageExtensions)) {
-      return true;
-    }
-
-    // Alternatively, you can also perform a more robust check by attempting to load the image
-    const img = new Image();
-    img.src = url;
-
-    // If the image can be loaded successfully, consider it a valid image URL
-    return img.complete && img.naturalWidth > 0;
-  };
-  const addImage = function (imageToAdd) {
+  const addImage = async function (imageToAdd) {
+    const validatedImage = await validateAvatar(imageToAdd);
     if (
-      isValidImageUrl(imageToAdd) &&
+      validatedImage &&
       !images.includes(imageToAdd) &&
       imageToAdd.length > 0
     ) {
@@ -40,10 +26,8 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
       setError(null);
     } else if (images.includes(imageToAdd)) {
       setError("Cannot submit same image multiple times");
-    } else if (!isValidImageUrl(imageToAdd)) {
-      setError(
-        "Must be a valid URL to a publicly available image, ending in .jpg .png etc."
-      );
+    } else if (!validatedImage) {
+      setError("Must be a valid URL to a publicly available image");
     }
     setImage("");
   };
@@ -58,26 +42,35 @@ function Images({ images = [], onImagesChange, active, onImageAdd }) {
       {active && (
         <div>
           <div className="grid gap-4">
-            <div className="flex">
-              <Input
-                onChange={handleImageChange}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                placeholder={
-                  isFocused ? "write the URL to the image" : "add image"
-                }
-                id="image"
-                value={image}
-              />
-              <Button
-                type="button"
-                onClick={() => addImage(image)}
-                className="flex gap-1 bg-primary"
-              >
-                <p>Add image</p>
-                <CiCirclePlus size={28} />
-              </Button>
-            </div>
+            <fieldset>
+              <Label htmlFor="image">Images:</Label>
+              <div className="flex">
+                <Input
+                  onChange={handleImageChange}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addImage(image);
+                    }
+                  }}
+                  placeholder={
+                    isFocused ? "write the URL to the image" : "add image"
+                  }
+                  id="image"
+                  value={image}
+                />
+                <Button
+                  type="button"
+                  onClick={() => addImage(image)}
+                  className="flex gap-1 bg-primary"
+                >
+                  <p>Add image</p>
+                  <CiCirclePlus size={28} />
+                </Button>
+              </div>
+            </fieldset>
           </div>
           {error && <div className="text-destructive">{error}</div>}
         </div>

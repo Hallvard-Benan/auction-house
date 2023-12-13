@@ -21,7 +21,6 @@ export default function CreateListingForm() {
   const [dateError, setDateError] = useState(null);
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
-  const [isAddingTag, setIsAddingTag] = useState(false);
 
   const createListingMutation = useMutation({
     mutationFn: createListing,
@@ -37,10 +36,6 @@ export default function CreateListingForm() {
   });
   const handleTagsChange = (newTags) => {
     setTags(newTags);
-  };
-
-  const handleTagsAdd = () => {
-    setIsAddingTag(false);
   };
 
   const handleImagesChange = (newImages) => {
@@ -87,7 +82,7 @@ export default function CreateListingForm() {
     return (
       <form
         onSubmit={onSubmit}
-        className=" grid gap-6  mx-auto bg-secondary/40 p-4 sm:p-8 rounded-md"
+        className=" grid gap-6  mx-auto bg-secondary/40 p-4 sm:p-8 rounded-md max-w-[740px] overflow-hidden"
       >
         <fieldset>
           <Label htmlFor="title">
@@ -103,8 +98,9 @@ export default function CreateListingForm() {
           <p className="text-destructive">{titleError && titleError}</p>
         </fieldset>
         <fieldset>
-          <Label htmlFor="">Description:</Label>
+          <Label htmlFor="description">Description:</Label>
           <Textarea
+            id="description"
             name="description"
             placeholder="Your description"
             value={description}
@@ -112,10 +108,7 @@ export default function CreateListingForm() {
           />
         </fieldset>
         <fieldset className="grid gap-1">
-          <Label htmlFor="images">Images:</Label>
-
           <Images
-            id="images"
             onExit
             images={images}
             onImagesChange={handleImagesChange}
@@ -123,28 +116,12 @@ export default function CreateListingForm() {
           ></Images>
         </fieldset>
         <fieldset className="grid gap-4">
-          <div>
-            <Label htmlFor="tags">Tags:</Label>
-            {tags.length < 1 && (
-              <h3 className="text-sm text-muted-foreground">
-                Select from popular tags, or add you own tag below.
-              </h3>
-            )}
-          </div>
           <Tags
             tags={tags}
             onTagsChange={handleTagsChange}
-            active={isAddingTag}
-            onTagsAdd={handleTagsAdd}
             onTagsRemove={removeTag}
             variant={"form"}
-            id="tags"
           />
-          {!isAddingTag && (
-            <Button type="button" onClick={() => setIsAddingTag(true)}>
-              Add your own tag
-            </Button>
-          )}
           <div>
             {tags.length > 1 && <h3>Chosen tags: </h3>}
 
@@ -169,6 +146,7 @@ export default function CreateListingForm() {
           </Label>
           <Input
             className={titleError && "border-destructive"}
+            name="date"
             id="date"
             type="datetime-local"
             onChange={(e) => {
