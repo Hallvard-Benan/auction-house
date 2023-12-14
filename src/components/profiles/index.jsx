@@ -67,7 +67,7 @@ function Profile() {
     onSuccess: () => {
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ["profile", profileName] });
-      }, 200);
+      }, 300);
 
       navigate({ to: `/profile`, search: { name: profileName } });
     },

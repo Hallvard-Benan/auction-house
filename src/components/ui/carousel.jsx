@@ -11,7 +11,7 @@ function Carousel({ images = [] }) {
   const activeSlideStyles = "object-contain w-full h-full";
 
   const imageButtonStyles =
-    "object-cover w-14 h-14 cursor-pointer transition-opacity transition duration-300";
+    "object-cover w-12 h-12 cursor-pointer transition-opacity transition duration-300";
   const currentImageButtonStyles = `${imageButtonStyles} opacity-10 ease-outs`;
 
   return (
@@ -25,7 +25,9 @@ function Carousel({ images = [] }) {
       </div>
       <div
         className={
-          images.length < 2 ? "flex justify-center" : "flex justify-between"
+          images.length < 2
+            ? "flex justify-center items-center"
+            : "flex justify-between items-center "
         }
       >
         {images.length > 1 && (
@@ -40,9 +42,14 @@ function Carousel({ images = [] }) {
             <FaChevronRight />
           </button>
         )}
+        <div className={images.length > 3 ? "flex sm:hidden" : "hidden"}>
+          {currentSlide + 1} / {images.length}
+        </div>
         <div
           className={
-            images.length <= 3 ? "flex gap-2" : "hidden sm:flex sm:gap-2 "
+            images.length <= 3
+              ? "flex gap-2"
+              : "hidden sm:flex flex-shrink sm:gap-2 "
           }
         >
           {images.map((image, index) => (
