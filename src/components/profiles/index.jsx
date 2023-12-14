@@ -15,7 +15,7 @@ import SkeletonProfile from "./loading";
 
 function Profile() {
   const [isMyProfile, setIsMyProfile] = useState(false);
-  const [profileName, setProfileName] = useState(null);
+  const [profileName, setProfileName] = useState("");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { authUser } = useAuth();
@@ -24,7 +24,7 @@ function Profile() {
     const searchParams = new URLSearchParams(window.location.search);
     const name = searchParams.get("name");
     setProfileName(name);
-  }, []);
+  }, [window.location.search]);
 
   const {
     error,

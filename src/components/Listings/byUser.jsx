@@ -9,8 +9,9 @@ function ListingsByUser({ user }) {
     error,
     data: listings,
   } = useQuery({
-    queryKey: ["listings by user"],
+    queryKey: ["listings by user", user],
     queryFn: () => fetchAllListingsByUser(user),
+    enabled: !!user,
   });
 
   if (status === "error") {
