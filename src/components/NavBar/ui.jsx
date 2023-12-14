@@ -57,7 +57,7 @@ function NavBarUi({
                 <DropdownMenuTrigger className="flex gap-1 items-center text-2xl">
                   <TfiMenu className="" />
                   <img
-                    className="w-10 md:w-12 rounded-full"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
                     src={
                       avatar
                         ? avatar

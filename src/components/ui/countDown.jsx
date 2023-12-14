@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function CountdownTimer({ endsAt, longFormat, className }) {
+function CountdownTimer({ endsAt, longFormat, className, mediumFormat }) {
   const calculateTimeRemaining = () => {
     const now = new Date().getTime();
     const endTime = new Date(endsAt).getTime();
@@ -44,16 +44,17 @@ function CountdownTimer({ endsAt, longFormat, className }) {
       {longFormat === true && (
         <p className="font font-normal">Auction ends in:</p>
       )}
-      {timeRemaining.days >= 1 && <p>{timeRemaining.days} days</p>}
+      {timeRemaining.days >= 1 && <p>{timeRemaining.days} d</p>}
       {timeRemaining.days < 2 && timeRemaining.hours > 0 && (
-        <p className={shortTimeLeft}>{timeRemaining.hours} hours</p>
+        <p className={shortTimeLeft}>{timeRemaining.hours} h</p>
       )}
       {timeRemaining.days < 2 && (
-        <p className={shortTimeLeft}>{timeRemaining.minutes} minutes</p>
+        <p className={shortTimeLeft}>{timeRemaining.minutes} m</p>
       )}
-      {timeRemaining.days <= 1 && (
-        <p className={shortTimeLeft}>{timeRemaining.seconds} seconds</p>
+      {timeRemaining.days < 1 && (
+        <p className={shortTimeLeft}>{timeRemaining.seconds} s</p>
       )}
+      {mediumFormat && <p>Left</p>}
     </div>
   );
 }

@@ -175,7 +175,12 @@ function ListingUi({
                 <h2 className="text:xl md:text-2xl font-medium">Tags:</h2>
                 <div className="flex flex-wrap gap-1">
                   {tags.map((tagName, index) => (
-                    <Tag editable={false} key={index} text={tagName} />
+                    <Link
+                      key={index}
+                      to={`/listings?_tag=${tagName.toLowerCase()}`}
+                    >
+                      <Tag editable={false} text={tagName} />
+                    </Link>
                   ))}
                 </div>
               </div>

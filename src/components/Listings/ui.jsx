@@ -53,13 +53,22 @@ function ListingsUi({ listings = [], variant }) {
                   </CardTitle>
                   {variant !== "bid" ? (
                     <CardDescription>
-                      {highestBid.amount > 0
-                        ? `Highest Bid: ${highestBid.amount} $`
-                        : "No bids yet"}
+                      {highestBid.amount > 0 ? (
+                        <h3 className="text-lg text-primary">
+                          <span className="font-medium">
+                            {highestBid.amount}$
+                          </span>{" "}
+                        </h3>
+                      ) : (
+                        <h3 className="text-lg">No bids</h3>
+                      )}
                     </CardDescription>
                   ) : (
                     <CardDescription>
-                      <CountdownTimer endsAt={endsAt}></CountdownTimer>
+                      <CountdownTimer
+                        endsAt={endsAt}
+                        mediumFormat={true}
+                      ></CountdownTimer>
                     </CardDescription>
                   )}
                 </CardFooter>
