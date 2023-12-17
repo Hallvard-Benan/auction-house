@@ -4,16 +4,13 @@ import FilterForm from "../components/FilterForm";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import SearchBar from "../components/ui/searchBar";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button } from "../components/ui/button";
+import { useQuery } from "@tanstack/react-query";
 import Tag from "../components/ui/tag";
 import ErrorMessage from "../components/ui/errorMessage";
 
 function ListingsPage() {
-  const [pageNumber, setPageNumber] = useState(1);
   const [sortBy, setSortBy] = useState("created");
   const [sortOrder, setSortOrder] = useState("desc");
-  const [limit, setLimit] = useState(100);
   const [initialListings, setInitialListings] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [tag, setTag] = useState("");
