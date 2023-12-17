@@ -87,28 +87,24 @@ export async function createListing({
   endsAt,
 }) {
   const accessToken = window.localStorage.getItem("access_token");
-  try {
-    const res = await axios.post(
-      `${baseUrl}/listings`,
-      {
-        title,
-        description,
-        tags,
-        media,
-        endsAt,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
 
-    return res.data;
-  } catch (error) {
-    console.error("Error creating listing:", error);
-    throw error;
-  }
+  const res = await axios.post(
+    `${baseUrl}/listings`,
+    {
+      title,
+      description,
+      tags,
+      media,
+      endsAt,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  return res.data;
 }
 
 export async function updateProfileImage(avatar, name) {

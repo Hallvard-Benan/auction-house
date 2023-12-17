@@ -7,6 +7,7 @@ import SearchBar from "../components/ui/searchBar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import Tag from "../components/ui/tag";
+import ErrorMessage from "../components/ui/errorMessage";
 
 function ListingsPage() {
   const [pageNumber, setPageNumber] = useState(1);
@@ -19,8 +20,6 @@ function ListingsPage() {
   const [listingsToDisplay, setListingsToDisplay] = useState([]);
   const [active, setActive] = useState(true);
   const navigate = useNavigate();
-
-  // this is when i started messing up
 
   const {
     status,
@@ -172,6 +171,7 @@ function ListingsPage() {
           </div>
         </div>
       </div>
+      {status === "error" && <ErrorMessage error={error}></ErrorMessage>}
       {status === "success" && !listings && listingsToDisplay.length < 1 && (
         <h2>Could not find any matching listings</h2>
       )}

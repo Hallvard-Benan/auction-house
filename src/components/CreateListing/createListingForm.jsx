@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
-import Tags from "../Forms/tags";
+import Tags from "./tags";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
@@ -34,7 +34,7 @@ export default function CreateListingForm() {
     onSuccess: (res) => {
       setStatus("success");
       toast.success("Successfully created post", { duration: 2000 });
-      setTimeout(() => navigate({ to: `/listing?id=${res.id}` }), 1500);
+      setTimeout(() => navigate({ to: `/listing?id=${res.id}` }), 1000);
     },
   });
   const handleTagsChange = (newTags) => {
@@ -97,7 +97,7 @@ export default function CreateListingForm() {
           <h2 className="text-xl md:text-2xl font-medium">
             {status === "success" && " Navigating to post"}
           </h2>
-          <Spinner></Spinner>
+          {status === "pending" && <Spinner></Spinner>}
         </div>
       </div>
       <fieldset>

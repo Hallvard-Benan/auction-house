@@ -4,7 +4,7 @@ import SearchBar from "../components/ui/searchBar";
 import { search } from "../lib/search";
 import { fetchAllListings } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import Tags from "../components/Forms/tags";
+import Tags from "../components/CreateListing/tags";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
 

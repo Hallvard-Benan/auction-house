@@ -1,6 +1,4 @@
-import React from "react";
-import SearchBar from "../components/ui/searchBar";
-import CreateListingForm from "../components/Forms/createListingForm";
+import CreateListingForm from "../components/CreateListing/createListingForm";
 
 function CreateListingPage() {
   return (
