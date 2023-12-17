@@ -3,18 +3,13 @@ import { Skeleton } from "./skeleton";
 
 export default function SkeletonCard() {
   return (
-    <Card>
-      <CardHeader>
-        <Skeleton className="w-24 h-8" />
-      </CardHeader>
-      <CardContent className="grid gap-2">
-        <Skeleton className="w-full h-56" />
-        <Skeleton className="w-full h-4" />
-        <Skeleton className="w-24 h-4" />
+    <Card className="w-full h-[26rem] overflow-hidden">
+      <CardContent className="grid gap-2 px-0">
+        <Skeleton className="h-[18rem] " />
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Skeleton className="w-24 h-6" />
-        <Skeleton className="w-24 h-10" />
+      <CardFooter className="flex flex-col gap-4">
+        <Skeleton className="w-60 h-9" />
+        <Skeleton className="w-20 h-8" />
       </CardFooter>
     </Card>
   );

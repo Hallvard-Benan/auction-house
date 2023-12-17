@@ -1,9 +1,12 @@
 import { Router, Route, RootRoute } from "@tanstack/react-router";
-import Home from "./pages/Home";
-import Listing from "./pages/Listing";
-import Profile from "./pages/Profile";
-import CreateListing from "./pages/CreateListing";
+import HomePage from "./pages/HomePage";
+import ListingPage from "./pages/ListingPage";
+import ProfilePage from "./pages/ProfilePage";
+import CreateListingPage from "./pages/CreateListingPage";
+import MyListingsPage from "./pages/MyListingsPage";
 import Root from "./App";
+import MyBidsPage from "./pages/MyBidsPage";
+import ListingsPage from "./pages/ListingsPage";
 
 const rootRoute = new RootRoute({
   component: Root,
@@ -12,31 +15,52 @@ const rootRoute = new RootRoute({
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: Home,
+  component: HomePage,
+});
+
+const listingsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/listings",
+  component: ListingsPage,
 });
 
 const listingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/listing",
-  component: Listing,
+  component: ListingPage,
 });
 
 const profileRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/profile",
-  component: Profile,
+  component: ProfilePage,
+});
+
+const myListingsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/my-listings",
+  component: MyListingsPage,
+});
+
+const myBidsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/my-bids",
+  component: MyBidsPage,
 });
 
 const createListingRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/create",
-  component: CreateListing,
+  component: CreateListingPage,
 });
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  listingsRoute,
   listingRoute,
   profileRoute,
+  myListingsRoute,
+  myBidsRoute,
   createListingRoute,
 ]);
 

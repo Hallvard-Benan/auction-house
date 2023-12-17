@@ -1,4 +1,3 @@
-import React from "react";
 import SkeletonCard from "../ui/skeletonCard";
 function SkeletonListings() {
   return (

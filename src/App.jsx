@@ -1,22 +1,20 @@
 import "./App.css";
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, ScrollRestoration } from "@tanstack/react-router";
+import NavBar from "./components/NavBar";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <>
-      <a href="/" className="border">
-        home
-      </a>
-      <a href="/listing" className="border">
-        listing
-      </a>
-      <a href="/profile" className="border">
-        profile
-      </a>
-      <a href="/create" className="border">
-        create
-      </a>
-      <Outlet />
+      <ScrollRestoration />
+      <Toaster richColors />
+      <div className="w-calc mx-auto grid gap-4">
+        <div className="md:h-20">
+          <NavBar className="w-full" />
+        </div>
+        <Outlet />
+        <div className="h-20"></div>
+      </div>
     </>
   );
 }
