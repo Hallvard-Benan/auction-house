@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Listings from "../components/Listings";
 import SearchBar from "../components/ui/searchBar";
-import { search } from "../lib/search";
 import { fetchAllListings } from "../lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Tags from "../components/CreateListing/tags";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 function HomePage() {
   const [pageNumber, setPageNumber] = useState(1);
-  const [sortBy, setSortBy] = useState("created");
-  const [sortOrder, setSortOrder] = useState("desc");
-  const [limit, setLimit] = useState(100);
+  const [limit, setLimit] = useState(20);
   const [isLastPage, setIsLastPage] = useState(false);
   const queryClient = useQueryClient();
+  const limitRef = useRef(20);
+
   const navigate = useNavigate();
 
   const {
@@ -23,7 +29,8 @@ function HomePage() {
     data: listings,
   } = useQuery({
     queryKey: ["listings", pageNumber],
-    queryFn: () => fetchAllListings(pageNumber, limit, sortBy, sortOrder),
+    queryFn: () =>
+      fetchAllListings(pageNumber, limitRef.current, "created", "desc"),
     keepPreviousData: true,
   });
   const handleOnSubmitSearch = async (e) => {
@@ -61,6 +68,22 @@ function HomePage() {
           </Button>
         )}
       </div>
+      <Select
+        onValueChange={(value) => {
+          limitRef.current = value;
+          setLimit(value);
+          queryClient.invalidateQueries({ queryKey: ["listings", pageNumber] });
+        }}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder={`Per page: ${limit}`} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={20}>Per page: 20</SelectItem>
+          <SelectItem value={50}>Per page: 50</SelectItem>
+          <SelectItem value={100}>Per page: 100</SelectItem>
+        </SelectContent>
+      </Select>
       <Listings status={status} error={error} listings={listings} />
       <div className="flex gap-4 mx-auto items-center">
         {pageNumber > 1 && (
