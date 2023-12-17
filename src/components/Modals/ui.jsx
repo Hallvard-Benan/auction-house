@@ -244,8 +244,14 @@ function LoginModalUi({
                 )
               )}
             </div>
-            <div className="text-destructive">{error}</div>
-            <Button disabled={!verifiedLogin} type="submit" className="">
+            <div data-cy="login-error-response" className="text-destructive">
+              {error}
+            </div>
+            <Button
+              disabled={!verifiedLogin}
+              type="submit"
+              data-cy="submit-login"
+            >
               {loading ? <Spinner></Spinner> : "Log in"}
             </Button>
           </form>
@@ -306,7 +312,9 @@ function LoginModalUi({
                 )
               )}
             </div>
-            <div className="text-destructive">{error}</div>
+            <div data-cy="register-error-response" className="text-destructive">
+              {error}
+            </div>
             <Button type="submit" disabled={!verifiedRegister}>
               {loading ? <Spinner></Spinner> : "Register"}
             </Button>

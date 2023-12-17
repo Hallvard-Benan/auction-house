@@ -29,13 +29,15 @@ function ListingsUi({ listings = [], variant }) {
           return (
             <Card
               key={index}
-              className="overflow-hidden grid h-[28rem] grid-cols-1 relative"
+              className="overflow-hidden grid h-[28rem] grid-cols-1 relative group"
             >
               <Link
                 to={`/listing?id=${id}`}
-                className="col-span-1 grow-0 grid grid-cols-1 max-h-full"
+                className="col-span-1 listing grow-0 grid grid-cols-1 max-h-full"
+                data-cy={`listing-${id}`}
               >
                 <CardContent className="px-0 col-span-1 overflow-hidden h-[20rem]">
+                  <div className="transition-all duration-300 text-primary-foreground text-2xl font-semibold opacity-0 group-hover:bg-black/10 group-hover:opacity-100 absolute w-full h-[20rem] z-20"></div>
                   <img
                     loading="lazy"
                     src={
@@ -44,7 +46,7 @@ function ListingsUi({ listings = [], variant }) {
                         : "https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg"
                     }
                     alt={title}
-                    className="w-full h-[20rem] object-cover"
+                    className="w-full h-[20rem] group-hover:blur-sm z-10 object-cover group-hover:scale-105 transition-all duration-300"
                   />
                 </CardContent>
                 <CardFooter className="row-span-1 w-full grid">
@@ -60,7 +62,9 @@ function ListingsUi({ listings = [], variant }) {
                           </span>{" "}
                         </h3>
                       ) : (
-                        <h3 className="text-lg">No bids</h3>
+                        <h3 data-cy={`no_bids_${id}`} className="text-lg">
+                          No bids
+                        </h3>
                       )}
                     </CardDescription>
                   ) : (

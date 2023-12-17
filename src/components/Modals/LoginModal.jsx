@@ -113,7 +113,11 @@ function LoginModal({ link }) {
   return (
     <div className="flex gap-2 items-center">
       <Button onClick={() => openModal("register")}>Register</Button>
-      <Button variant="secondary" onClick={() => openModal("login")}>
+      <Button
+        data-cy="open-login-form"
+        variant="secondary"
+        onClick={() => openModal("login")}
+      >
         Login
       </Button>
       <LoginModalUi

@@ -25,7 +25,7 @@ function ListingUi({
   endsAt = "",
   id,
   highestBid,
-  sortedBids,
+  sortedBids = [],
   seller = {},
   _count = {},
   myPost = false,
@@ -137,8 +137,15 @@ function ListingUi({
               {!myPost && loggedIn && (
                 <div>
                   <form className="flex" onSubmit={onSubmitBid}>
-                    <Input type="number" name="bid" placeholder="$" />
-                    <Button type="submit">place bid</Button>
+                    <Input
+                      data-cy="bidInput"
+                      type="number"
+                      name="bid"
+                      placeholder="$"
+                    />
+                    <Button data-cy="bidSubmit" type="submit">
+                      place bid
+                    </Button>
                   </form>
                   <p>Available funds: ${availableCredits}</p>
                   {error && <p className="text-destructive">{error}</p>}
@@ -158,7 +165,7 @@ function ListingUi({
               <TabsTrigger className="md:text-xl" value="details">
                 Details
               </TabsTrigger>
-              <TabsTrigger className="md:text-xl" value="bids">
+              <TabsTrigger data-cy="bidTab" className="md:text-xl" value="bids">
                 Bid History
               </TabsTrigger>
             </TabsList>
@@ -202,7 +209,7 @@ function ListingUi({
                 </TableHeader>
                 <TableBody>
                   {sortedBids.map((bid, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} data-cy={`bid-${bid.amount}`}>
                       <TableCell className="font-medium">
                         {formattedDate(bid.created)}
                       </TableCell>

@@ -54,7 +54,10 @@ function NavBarUi({
             </Link>
             <div className="flex items-center justify-center w-[6rem]">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex gap-1 items-center text-2xl">
+                <DropdownMenuTrigger
+                  data-cy="open-menu-button"
+                  className="flex gap-1 items-center text-2xl"
+                >
                   <TfiMenu className="" />
                   <img
                     className="w-10 h-10 md:w-12 md:h-12 rounded-full object-contain"
@@ -92,6 +95,7 @@ function NavBarUi({
                   </Link>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
+                    data-cy="logout-button"
                     className="px-8 text-red-700 hover:cursor-pointer"
                     onClick={handleLogout}
                   >

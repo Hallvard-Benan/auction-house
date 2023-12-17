@@ -23,6 +23,7 @@ function InputGroup({
       </Label>
 
       <Input
+        data-cy={id}
         autocomplete="true"
         onChange={onChange}
         value={value}
