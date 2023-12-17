@@ -33,7 +33,6 @@ function Bids({ user }) {
         : [];
 
       setBidsToDisplay(uniqueBids.map((listing) => listing.listing));
-      console.log(uniqueBids);
     }
   }, [bids]);
 

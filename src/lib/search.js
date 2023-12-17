@@ -29,25 +29,16 @@ export async function search(tag, active, sortBy, sortOrder) {
       pageNumber++;
     }
   } catch (error) {
-    console.error("Error searching through pages:", error);
-
-    console.log("Error array:", error);
+    return error;
   }
 
   return allListings;
 }
 
 export const filterSearch = function (listings, query) {
-  query = query.toUpperCase();
+  query = query.toLowerCase();
 
-  return listings.filter(({ title, description }) => {
-    return (
-      toUpperCase(title).includes(query) ||
-      toUpperCase(description).includes(query)
-    );
+  return listings.filter(({ title }) => {
+    return title.toLowerCase().includes(query);
   });
 };
-
-function toUpperCase(str) {
-  return str ? str.toUpperCase() : "";
-}

@@ -63,7 +63,6 @@ function ProfileUi({
                     defaultValue={avatar}
                     type="text"
                     onChange={(e) => {
-                      console.log(e.target.value);
                       setNewAvatar(e.target.value);
                     }}
                     placeholder="Image URL"

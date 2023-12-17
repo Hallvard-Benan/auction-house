@@ -54,7 +54,7 @@ function ListingsUi({ listings = [], variant }) {
                     {title.length < 20 ? title : limitLength(title, 55) + "..."}
                   </CardTitle>
                   {variant !== "bid" ? (
-                    <CardDescription>
+                    <div>
                       {highestBid.amount > 0 ? (
                         <h3 className="text-lg text-primary">
                           <span className="font-medium">
@@ -66,14 +66,14 @@ function ListingsUi({ listings = [], variant }) {
                           No bids
                         </h3>
                       )}
-                    </CardDescription>
+                    </div>
                   ) : (
-                    <CardDescription>
+                    <div>
                       <CountdownTimer
                         endsAt={endsAt}
                         mediumFormat={true}
                       ></CountdownTimer>
-                    </CardDescription>
+                    </div>
                   )}
                 </CardFooter>
               </Link>

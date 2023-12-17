@@ -25,7 +25,7 @@ function Listing() {
 
   const submitBidMutation = useMutation({
     mutationFn: makeBid,
-    onError: (err) => console.log(err),
+    onError: () => setError("something went wrong, please try again later"),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["listing", listingId],

@@ -26,8 +26,7 @@ export default function CreateListingForm() {
   const createListingMutation = useMutation({
     mutationFn: createListing,
     onMutate: () => setStatus("pending"),
-    onError: (err) => {
-      console.log(err);
+    onError: () => {
       setStatus("error");
       toast.error("Something went Wrong", { duration: 2000 });
     },
