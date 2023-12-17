@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { validateAvatar } from "/src/lib/validation";
 import { useNavigate } from "@tanstack/react-router";
-
+import ErrorMessage from "../ui/errorMessage";
 import ProfileUi from "./ui";
 
 import ListingsByUser from "../Listings/byUser";
@@ -75,17 +75,7 @@ function Profile() {
 
   if (status === "pending") return <SkeletonProfile />;
 
-  if (status === "error")
-    return (
-      <div>
-        Something went wrong!{" "}
-        {error.message.includes("401")
-          ? "Not authorized, Please log in"
-          : error.message.includes("404")
-          ? "Profile does not exist"
-          : error.message}
-      </div>
-    );
+  if (status === "error") return <ErrorMessage error={error} />;
   if (status === "success")
     return (
       <div className="grid gap-10">

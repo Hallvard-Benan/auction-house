@@ -2,6 +2,7 @@ import SkeletonListings from "./loading";
 import { fetchAllListingsByUser } from "/src/lib/api";
 import Listings from ".";
 import { useQuery } from "@tanstack/react-query";
+import ErrorMessage from "../ui/errorMessage";
 
 function ListingsByUser({ user }) {
   const {
@@ -15,7 +16,7 @@ function ListingsByUser({ user }) {
   });
 
   if (status === "error") {
-    return <div>{error.message} </div>;
+    return <ErrorMessage error={error} />;
   }
 
   if (status === "pending") {

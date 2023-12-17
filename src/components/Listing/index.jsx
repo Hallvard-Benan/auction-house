@@ -5,6 +5,7 @@ import { useAuth } from "/src/Context/AuthContext";
 import { useEffect, useState } from "react";
 import { makeBid } from "/src/lib/api";
 import SkeletonListing from "./loading";
+import ErrorMessage from "../ui/errorMessage";
 
 function Listing() {
   const [isMyPost, setIsMyPost] = useState(false);
@@ -79,7 +80,7 @@ function Listing() {
 
   if (status === "pending") return <SkeletonListing />;
 
-  if (status === "error") return <div>{dataError.message}</div>;
+  if (status === "error") return <ErrorMessage error={dataError} />;
   if (status === "success")
     return (
       <ListingUi

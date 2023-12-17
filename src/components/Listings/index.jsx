@@ -1,10 +1,11 @@
 import SkeletonListings from "./loading";
 
 import ListingsUi from "./ui";
+import ErrorMessage from "../ui/errorMessage";
 
 function Listings({ status, error, listings, variant }) {
   if (status === "error") {
-    return <div>{error.message} </div>;
+    return <ErrorMessage error={error} />;
   }
 
   if (status === "pending") {
