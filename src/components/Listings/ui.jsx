@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
+import ToTopBtn from "../ToTop";
 
 import CountdownTimer from "../ui/countDown";
 
@@ -11,6 +12,7 @@ function ListingsUi({ listings = [], variant }) {
 
   return (
     <section className="w-calc mx-auto">
+      <ToTopBtn></ToTopBtn>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center align-center">
         {listings.map(({ id, title, media, bids, endsAt }, index) => {
           let highestBid = { amount: 0 };

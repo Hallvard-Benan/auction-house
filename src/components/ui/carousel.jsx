@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaChevronRight } from "react-icons/fa6";
 
 function Carousel({ images = [] }) {

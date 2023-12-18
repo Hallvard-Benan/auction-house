@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        "desktop-lg": "1130px",
+      },
       width: {
         calc: "calc(min(100vw - 20px, 1050px));",
       },
