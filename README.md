@@ -1,5 +1,7 @@
 # Auction House, Semester project 2
 
+![image](/public/screenshot.png)
+
 - Deployed site: https://the-auctionhouse.netlify.app/
 - Design and style guide: https://www.figma.com/file/QbxlW4nP2YjA6jzddi7WeO/Semester-project-2?type=design&node-id=0%3A1&mode=design&t=T55NYV0f9n0vTfdJ-1
 
