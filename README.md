@@ -14,6 +14,7 @@ Auction House is auction website, where users can view, post and bid on listings
 - TailwindCSS https://tailwindcss.com/
 - Components from ShadCN https://ui.shadcn.com/
 - Toast components from: Sonner https://sonner.emilkowal.ski/
+- Icons from: React icons https://react-icons.github.io/react-icons/
 - TanStack Query https://tanstack.com/query/latest
 - TanStack Router https://tanstack.com/router/v1
 
