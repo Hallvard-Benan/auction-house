@@ -5,6 +5,12 @@ import Tag from "../ui/tag";
 import CountdownTimer from "../ui/countDown";
 import Carousel from "../ui/carousel";
 import LoginModal from "../Modals/LoginModal";
+import {
+  Dialog,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+} from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
   Table,
@@ -33,6 +39,7 @@ function ListingUi({
   loggedIn = false,
   availableCredits,
   onSubmitBid = () => {},
+  onDelete = () => {},
 }) {
   const profileLink = `/profile?name=${seller.name}`;
 
@@ -51,7 +58,25 @@ function ListingUi({
   return (
     <>
       {myPost && (
-        <Button onClick={() => setIsEditing(true)}>Edit listing</Button>
+        <Dialog>
+          <DialogTrigger className="border-2 w-fit px-4 py-2 rounded-md border-destructive text-destructive mx-auto">
+            Delete this listing
+          </DialogTrigger>
+          <DialogContent className="gap-16">
+            <h2 className="text-2xl text-center">
+              Permanently delete listing?
+            </h2>
+            <div className="flex justify-between">
+              <DialogClose className="bg-secondary px-4 rounded-md">
+                cancel
+              </DialogClose>
+              <Button variant="destructive" onClick={onDelete}>
+                {" "}
+                Confirm Delete
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       )}
       <div className="grid grid-cols-1 justify-items-center md:justify-items-stretch md:grid-cols-2 gap-6 overflow-hidden">
         <div className="cols-span-1 md:col-span-2 grid md:grid-cols-5 md:h-96 gap-4 md:gap-8">

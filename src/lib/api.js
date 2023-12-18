@@ -155,3 +155,14 @@ export async function getBidsByProfile(name) {
   );
   return res.data;
 }
+
+export async function deleteListing(id) {
+  const accessToken = window.localStorage.getItem("access_token");
+
+  const res = await axios.delete(`${baseUrl}/listings/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res.data;
+}
