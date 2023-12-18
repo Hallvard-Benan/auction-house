@@ -1,23 +1,24 @@
 # Auction House, Semester project 2
 
 - Deployed site: https://the-auctionhouse.netlify.app/
+- Design and style guide: https://www.figma.com/file/QbxlW4nP2YjA6jzddi7WeO/Semester-project-2?type=design&node-id=0%3A1&mode=design&t=T55NYV0f9n0vTfdJ-1
 
-Auction House is auction website, where users can post and bid on listings.
+Auction House is auction website, where users can view, post and bid on listings.
 
 ## Built with
 
 - ReactJs https://react.dev/
 - Vite https://vitejs.dev/
 - TailwindCSS https://tailwindcss.com/
-- ShadCN https://ui.shadcn.com/
-- Sonner https://sonner.emilkowal.ski/
-- TanStack Query v5 https://tanstack.com/query/latest
+- Components from ShadCN https://ui.shadcn.com/
+- Toast components from: Sonner https://sonner.emilkowal.ski/
+- TanStack Query https://tanstack.com/query/latest
 - TanStack Router https://tanstack.com/router/v1
 
 ## Features
 
 - Registration with a @stud.noroff.no email
-- Search, sort and filter listings, or view by tag
+- Search, sort and filter listings, toggle between all or active listings only, or search by tag.
 - Bidding on listings
 - viewing a listings bid history
 - Fully responsive
@@ -71,7 +72,7 @@ npx cypress run
 
 ## Contributing
 
-Fork the repo, create a new branch to make your changes and make a pull request, and I will take a look at it.
+Fork the repo, create a new branch to make your changes and make a pull request, and I will take a look at it. Or contact me with feedback.
 
 ## Contact
 
