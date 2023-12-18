@@ -2,7 +2,7 @@ import ListingUi from "./ui";
 import { fetchOneListing } from "/src/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "/src/Context/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { makeBid } from "/src/lib/api";
 import SkeletonListing from "./loading";
 import ErrorMessage from "../ui/errorMessage";
@@ -18,8 +18,9 @@ function Listing() {
   const [availableCredits, setAvailableCredits] = useState(0);
   const [highestBid, setHighestBid] = useState([]);
   const [sortedBids, setSortedBids] = useState([]);
+  const [bidLoading, setBidLoading] = useState(false);
   const navigate = useNavigate();
-
+  const bidRef = useRef(0);
   const deleteListingMutation = useMutation({
     mutationFn: deleteListing,
     onError: () =>
@@ -39,8 +40,16 @@ function Listing() {
 
   const submitBidMutation = useMutation({
     mutationFn: makeBid,
-    onError: () => setError("something went wrong, please try again later"),
-    onSuccess: () => {
+    onMutate: () => setBidLoading(true),
+    onError: () => {
+      setBidLoading(false);
+      setError("something went wrong, please try again later");
+    },
+    onSuccess: (e) => {
+      toast.success(`You bid $${bidRef.current} on ${e.title}`, {
+        duration: 2000,
+      });
+      setBidLoading(false);
       queryClient.invalidateQueries({
         queryKey: ["listing", listingId],
       });
@@ -56,6 +65,8 @@ function Listing() {
 
     const bidAmount = parseInt(e.target.bid.value);
     const availableFunds = authUser.credits;
+
+    bidRef.current = bidAmount;
     let bidToBeat;
     if (!highestBid) {
       bidToBeat = 0;
@@ -119,6 +130,7 @@ function Listing() {
         _count={listing._count}
         availableCredits={availableCredits}
         onDelete={handleOnDelete}
+        bidLoading={bidLoading}
       />
     );
 }

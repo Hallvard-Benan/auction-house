@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import Spinner from "../ui/spinner";
 
 function ListingUi({
   title = "",
@@ -40,6 +41,7 @@ function ListingUi({
   availableCredits,
   onSubmitBid = () => {},
   onDelete = () => {},
+  bidLoading,
 }) {
   const profileLink = `/profile?name=${seller.name}`;
 
@@ -168,7 +170,7 @@ function ListingUi({
                       placeholder="$"
                     />
                     <Button data-cy="bidSubmit" type="submit">
-                      place bid
+                      {!bidLoading ? "place bid" : <Spinner />}
                     </Button>
                   </form>
                   <p>Available funds: ${availableCredits}</p>
