@@ -106,6 +106,7 @@ function LoginModalUi({
       label: "Email",
       id: "email",
       type: "email",
+      autocomplete: "email",
       errorMessage: emailError,
       placeholder: "...@stud.noroff.no",
       required: true,
@@ -124,6 +125,7 @@ function LoginModalUi({
       required: true,
       type: "password",
       success: passwordSuccess,
+      autocomplete: "current-password",
       value: password,
       errorMessage: passwordError,
       onChange: (e) => {
@@ -139,6 +141,7 @@ function LoginModalUi({
       label: "Name",
       id: "name",
       placeholder: "Your username",
+      autocomplete: "nickname",
       required: true,
       errorMessage: nameError,
       success: nameSuccess,
@@ -153,6 +156,7 @@ function LoginModalUi({
       label: "Email",
       id: "emailRegister",
       type: "email",
+      autocomplete: "email",
       placeholder: "...@stud.noroff.no",
       required: true,
       errorMessage: emailError,
@@ -172,6 +176,7 @@ function LoginModalUi({
       errorMessage: avatarError,
       success: avatarSuccess,
       description: avatarDescription,
+      autocomplete: "photo",
       value: avatar,
       onChange: (e) => {
         setAvatar(e.target.value);
@@ -188,6 +193,7 @@ function LoginModalUi({
       required: true,
       value: password,
       errorMessage: passwordError,
+      autocomplete: "new-password",
       onChange: (e) => {
         setPassword(e.target.value);
         setPasswordError("");
@@ -226,6 +232,7 @@ function LoginModalUi({
                   value,
                   success,
                   onChange,
+                  autocomplete,
                 }) => (
                   <InputGroup
                     onBlur={() => handleOnValidate(id)}
@@ -239,6 +246,7 @@ function LoginModalUi({
                     errorMessage={errorMessage}
                     value={value}
                     onChange={onChange}
+                    autocomplete={autocomplete}
                   />
                 )
               )}
@@ -293,6 +301,7 @@ function LoginModalUi({
                   description,
                   success,
                   onChange,
+                  autocomplete,
                 }) => (
                   <InputGroup
                     onBlur={() => handleOnValidate(id)}
@@ -307,6 +316,7 @@ function LoginModalUi({
                     type={type}
                     errorMessage={errorMessage}
                     onChange={onChange}
+                    autocomplete={autocomplete}
                   />
                 )
               )}

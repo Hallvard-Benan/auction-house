@@ -13,6 +13,7 @@ function InputGroup({
   onChange,
   success,
   description,
+  autocomplete,
 }) {
   return (
     <div className="grid gap-2">
@@ -24,7 +25,7 @@ function InputGroup({
 
       <Input
         data-cy={id}
-        autocomplete="true"
+        autoComplete={autocomplete}
         onChange={onChange}
         value={value}
         required={required}
