@@ -1,5 +1,5 @@
 const registeredUser = Cypress.env();
-describe("bid functionality", () => {
+describe("viewing bids", () => {
   let listingId;
   beforeEach(() => {
     cy.intercept("POST", "/api/v1/auction/auth/login").as("loginRequest");
@@ -14,7 +14,7 @@ describe("bid functionality", () => {
     cy.get('[data-cy="submit-login"]').click();
     cy.wait("@loginRequest");
     cy.wait("@listingsRequest");
-    cy.get('[data-cy^="no_bids_"]')
+    cy.get('[data-cy^="with_bids_"]')
       .first()
       .invoke("attr", "data-cy")
       .then((value) => {
@@ -31,16 +31,10 @@ describe("bid functionality", () => {
       });
   });
 
-  it("logged in user can bid on a listing", () => {
-    cy.get('[data-cy^="no_bids_"]').first().click();
-
+  it("logged in user can view bids made on a listing", () => {
+    cy.get('[data-cy^="with_bids_"]').first().click();
     cy.wait("@getListing");
-
-    cy.get('[data-cy="bidInput"]').should("exist").type(1);
-    cy.get('[data-cy="bidSubmit"]').should("exist").click();
-    cy.wait("@getListing");
-
     cy.get('[data-cy="bidTab"]').click();
-    cy.get('[data-cy="bid-1"]').should("exist");
+    cy.get('[data-cy^="bid-"]').should("exist");
   });
 });

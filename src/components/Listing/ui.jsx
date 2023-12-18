@@ -117,7 +117,7 @@ function ListingUi({
             <div className="grid gap-2">
               <div className="flex text-lg font-semibold text-neutral-700">
                 {_count.bids > 0 ? (
-                  <h3>
+                  <h3 data-cy="currentBid">
                     <span className="text-primary text-2xl">
                       ${highestBid?.amount}
                     </span>{" "}

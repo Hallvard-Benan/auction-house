@@ -1,11 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-} from "../ui/card";
+import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
 
 import CountdownTimer from "../ui/countDown";
 
@@ -50,14 +44,17 @@ function ListingsUi({ listings = [], variant }) {
                   />
                 </CardContent>
                 <CardFooter className="row-span-1 w-full grid">
-                  <CardTitle>
+                  <CardTitle data-cy="card_title">
                     {title.length < 20 ? title : limitLength(title, 55) + "..."}
                   </CardTitle>
                   {variant !== "bid" ? (
                     <div>
                       {highestBid.amount > 0 ? (
                         <h3 className="text-lg text-primary">
-                          <span className="font-medium">
+                          <span
+                            data-cy={`with_bids_${id}`}
+                            className="font-medium"
+                          >
                             {highestBid.amount}$
                           </span>{" "}
                         </h3>
