@@ -59,7 +59,7 @@ function ListingUi({
     <>
       {myPost && (
         <Dialog>
-          <DialogTrigger className="border-2 w-fit px-4 py-2 rounded-md border-destructive text-destructive mx-auto">
+          <DialogTrigger className=" hover:bg-destructive/10 transition-all duration-200 border-2 w-fit px-4 py-2 rounded-md border-destructive text-destructive mx-auto">
             Delete this listing
           </DialogTrigger>
           <DialogContent className="gap-16">
