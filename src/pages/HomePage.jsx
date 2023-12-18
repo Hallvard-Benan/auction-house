@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Tags from "../components/CreateListing/tags";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "@tanstack/react-router";
+import FilterForm from "../components/FilterForm";
 import {
   Select,
   SelectContent,
@@ -49,6 +50,22 @@ function HomePage() {
     }
   }, [listings, limit]);
 
+  const handleOnSubmitFilters = (e) => {
+    e.preventDefault();
+    const sortByValue = e.target.sortBy.value;
+    const sortOrderValue = e.target.sortOrder.value;
+    const tagValue = e.target.tag.value;
+    const activePostsValue = e.target.activePostsOnly[1].checked;
+    let tagParam = "";
+
+    if (tagValue.length > 0) {
+      tagParam = `&_tag=${tagValue}`;
+    }
+    navigate({
+      to: `/listings?sortBy=${sortByValue}&sortOrder=${sortOrderValue}&active=${activePostsValue}${tagParam}`,
+    });
+  };
+
   return (
     <main className="grid gap-6">
       <SearchBar onSubmitSearch={handleOnSubmitSearch} />
@@ -68,22 +85,33 @@ function HomePage() {
           </Button>
         )}
       </div>
-      <Select
-        onValueChange={(value) => {
-          limitRef.current = value;
-          setLimit(value);
-          queryClient.invalidateQueries({ queryKey: ["listings", pageNumber] });
-        }}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder={`Per page: ${limit}`} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={20}>Per page: 20</SelectItem>
-          <SelectItem value={50}>Per page: 50</SelectItem>
-          <SelectItem value={100}>Per page: 100</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex justify-between">
+        <Select
+          onValueChange={(value) => {
+            limitRef.current = value;
+            setLimit(value);
+            queryClient.invalidateQueries({
+              queryKey: ["listings", pageNumber],
+            });
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder={`Per page: ${limit}`} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={20}>Per page: 20</SelectItem>
+            <SelectItem value={50}>Per page: 50</SelectItem>
+            <SelectItem value={100}>Per page: 100</SelectItem>
+          </SelectContent>
+        </Select>
+        <FilterForm
+          onSubmitFilters={handleOnSubmitFilters}
+          defaultActive={true}
+          defaultSort={"created"}
+          defaultOrder={"desc"}
+          defaultTag={""}
+        ></FilterForm>
+      </div>
       <Listings status={status} error={error} listings={listings} />
       <div className="flex gap-4 mx-auto items-center">
         {pageNumber > 1 && (
