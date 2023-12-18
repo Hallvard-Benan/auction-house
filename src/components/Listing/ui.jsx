@@ -71,7 +71,6 @@ function ListingUi({
                 cancel
               </DialogClose>
               <Button variant="destructive" onClick={onDelete}>
-                {" "}
                 Confirm Delete
               </Button>
             </div>
