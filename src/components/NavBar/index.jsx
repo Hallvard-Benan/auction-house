@@ -9,7 +9,7 @@ function NavBar() {
   const [visible, setVisible] = useState(true);
   const [userName, setUserName] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [userCredits, setUserCredits] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ function NavBar() {
     if (authUser) {
       setUserName(authUser.name);
       setAvatar(authUser.avatar);
-      setUserEmail(authUser.email);
+      setUserCredits(authUser.credits);
     }
   }, [authUser]);
 
@@ -59,7 +59,7 @@ function NavBar() {
   return (
     <NavBarUi
       avatar={avatar}
-      userEmail={userEmail}
+      userCredits={userCredits}
       profileLink={profileLink}
       userName={userName}
       loggedIn={isLoggedIn}
