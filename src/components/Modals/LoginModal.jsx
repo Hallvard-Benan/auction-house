@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { loginUser } from "../../lib/api";
 import { registerUser } from "../../lib/api";
-import { useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { useAuth } from "../../Context/AuthContext";

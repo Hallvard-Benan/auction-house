@@ -9,7 +9,7 @@ function NavBar() {
   const [visible, setVisible] = useState(true);
   const [userName, setUserName] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [userCredits, setUserCredits] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -17,10 +17,11 @@ function NavBar() {
     if (authUser) {
       setUserName(authUser.name);
       setAvatar(authUser.avatar);
-      setUserEmail(authUser.email);
+      setUserCredits(authUser.credits);
     }
   }, [authUser]);
 
+  // To handle scroll effect
   useEffect(() => {
     let prevScrollPos = window.scrollY;
 
@@ -28,10 +29,8 @@ function NavBar() {
       const currentScrollPos = window.scrollY;
 
       if (currentScrollPos > 60) {
-        // Scrolled down
         setVisible(prevScrollPos > currentScrollPos);
       } else {
-        // Scrolled up or less than 60 pixels
         setVisible(true);
       }
 
@@ -59,7 +58,7 @@ function NavBar() {
   return (
     <NavBarUi
       avatar={avatar}
-      userEmail={userEmail}
+      userCredits={userCredits}
       profileLink={profileLink}
       userName={userName}
       loggedIn={isLoggedIn}

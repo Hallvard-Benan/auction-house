@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { makeBid } from "/src/lib/api";
 import SkeletonListing from "./loading";
 import ErrorMessage from "../ui/errorMessage";
+import { deleteListing } from "/src/lib/api";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 function Listing() {
   const [isMyPost, setIsMyPost] = useState(false);
@@ -15,6 +18,17 @@ function Listing() {
   const [availableCredits, setAvailableCredits] = useState(0);
   const [highestBid, setHighestBid] = useState([]);
   const [sortedBids, setSortedBids] = useState([]);
+  const navigate = useNavigate();
+
+  const deleteListingMutation = useMutation({
+    mutationFn: deleteListing,
+    onError: () =>
+      toast.error("Error. Couldn't delete post", { duration: 2000 }),
+    onSuccess: () => {
+      toast.success("Post successfully deleted", { duration: 2000 });
+      navigate({ to: "/my-listings" });
+    },
+  });
 
   useEffect(() => {
     if (authUser) setAvailableCredits(authUser.credits);
@@ -33,6 +47,9 @@ function Listing() {
     },
   });
 
+  const handleOnDelete = () => {
+    deleteListingMutation.mutate(listingId);
+  };
   const handleOnSubmitBid = (e) => {
     e.preventDefault();
     setError(null);
@@ -101,6 +118,7 @@ function Listing() {
         onSubmitBid={handleOnSubmitBid}
         _count={listing._count}
         availableCredits={availableCredits}
+        onDelete={handleOnDelete}
       />
     );
 }

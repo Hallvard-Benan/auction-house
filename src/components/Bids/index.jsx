@@ -16,13 +16,12 @@ function Bids({ user }) {
   });
 
   useEffect(() => {
+    // To avoid rendering the same listing multiple times, show only the one with highest bid amount
     if (bids) {
       const uniqueBids = bids
         ? Object.values(
             bids.reduce((acc, bid) => {
               const listingId = bid.listing.id;
-
-              // Check if listingId is not in acc or if the current bid has a higher amount
               if (!acc[listingId] || bid.amount > acc[listingId].amount) {
                 acc[listingId] = bid;
               }

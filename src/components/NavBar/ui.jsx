@@ -23,7 +23,7 @@ function NavBarUi({
   profileLink,
   avatar,
   userName,
-  userEmail,
+  userCredits,
 }) {
   return (
     <nav
@@ -69,7 +69,7 @@ function NavBarUi({
                     alt="your avatar"
                   />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="flex flex-col-reverse md:flex-col ">
+                <DropdownMenuContent className="flex flex-col-reverse md:flex-col gap-1 ">
                   <Link to={profileLink}>
                     <DropdownMenuItem className="flex flex-col md:flex-col-reverse hover:cursor-pointer">
                       <div className="flex gap-1 items-center px-6">
@@ -77,11 +77,11 @@ function NavBarUi({
                       </div>
                       <div className="text-muted-foreground grid justify-items-center">
                         <p>{userName}</p>
-                        <p className="text-sm">{userEmail}</p>
+                        <p className="text-sm">${userCredits}</p>
                       </div>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                   </Link>
+                  <DropdownMenuSeparator />
                   <Link to="/my-bids">
                     <DropdownMenuItem className="px-8 hover:cursor-pointer">
                       My bids
