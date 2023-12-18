@@ -72,7 +72,6 @@ function LoginModal({ link }) {
     mutationFn: registerUser,
     onError: (res) => {
       setIsLoading(false);
-      console.log(res);
       setError(res.message);
     },
     onMutate: () => {
@@ -87,7 +86,6 @@ function LoginModal({ link }) {
 
   const handleOnSubmitRegister = function (event) {
     event.preventDefault();
-    console.log(event);
 
     const name = event.target.name.value;
     const email = event.target.emailRegister.value;

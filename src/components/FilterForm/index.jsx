@@ -30,7 +30,6 @@ function FilterForm({
     setPopoverOpen((prev) => !prev);
   };
   const handleCheckboxChange = (e) => {
-    console.log(e);
     setIsActivePostsChecked(e);
   };
 

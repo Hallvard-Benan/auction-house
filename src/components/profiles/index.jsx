@@ -33,7 +33,6 @@ function Profile() {
   } = useQuery({
     queryKey: ["profile", profileName],
     queryFn: () => {
-      console.log("getting profile");
       return getProfile(profileName);
     },
     enabled: !!profileName,
