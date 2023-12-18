@@ -139,7 +139,6 @@ export default function CreateListingForm() {
         />
         <div>
           {tags.length > 1 && <h3>Chosen tags: </h3>}
-
           {tags.length > 0 && (
             <div id="tagBox" className="flex flex-wrap gap-2">
               {tags.map((tagName) => (
@@ -154,7 +153,6 @@ export default function CreateListingForm() {
           )}
         </div>
       </fieldset>
-
       <fieldset>
         <Label htmlFor="date">
           <span className="text-destructive">*</span> End date:{" "}
@@ -170,7 +168,6 @@ export default function CreateListingForm() {
         ></Input>
         <p className="text-destructive">{dateError && dateError}</p>
       </fieldset>
-
       <Button
         type="submit"
         disabled={status !== "idle"}
@@ -178,10 +175,8 @@ export default function CreateListingForm() {
       >
         Create this listing
       </Button>
-
       {status === "pending" && <Spinner></Spinner>}
-
-      <span className="text-destructive">* Required</span>
+      <p className="text-destructive">* Required</p>
     </form>
   );
 }

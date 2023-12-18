@@ -78,7 +78,7 @@ function Tags({ tags = [], onTagsChange, onTagsAdd, onTagsRemove, variant }) {
                 value={tag}
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Prevents the default action of the enter key in a form
+                    e.preventDefault();
                     addTag(tag);
                   }
                 }}

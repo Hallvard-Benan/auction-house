@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardTitle } from "../ui/card";
 import CountdownTimer from "../ui/countDown";
 
 function ListingsUi({ listings = [], variant }) {
+  // Limiting length of titles
   const limitLength = function (str, max) {
     return str.length > max ? str.slice(0, max) : str;
   };

@@ -17,7 +17,6 @@ import {
   validatePassword,
 } from "/src/lib/validation";
 import Spinner from "../ui/spinner";
-import { toast } from "sonner";
 
 function LoginModalUi({
   type,

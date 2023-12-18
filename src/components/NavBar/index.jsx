@@ -21,6 +21,7 @@ function NavBar() {
     }
   }, [authUser]);
 
+  // To handle scroll effect
   useEffect(() => {
     let prevScrollPos = window.scrollY;
 
@@ -28,10 +29,8 @@ function NavBar() {
       const currentScrollPos = window.scrollY;
 
       if (currentScrollPos > 60) {
-        // Scrolled down
         setVisible(prevScrollPos > currentScrollPos);
       } else {
-        // Scrolled up or less than 60 pixels
         setVisible(true);
       }
 
